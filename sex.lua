@@ -23,8 +23,8 @@ function FlightACheck()
                 local pitch = math.deg(torso.Orientation.x) / 10
                 local headPitch = math.deg(head.Orientation.x) / 10
 
-                player:SetAttribute("Pitch", math.round(pitch))
-                player:SetAttribute("HeadPitch", math.round(headPitch))
+                player:SetAttribute("Pitch", math.floor(pitch + 0.5))
+                player:SetAttribute("HeadPitch", math.floor(headPitch + 0.5))
             end
         end
     end
@@ -143,14 +143,10 @@ function FlightBCheck()
                 end
             end
 
-            if humanoid:GetState() == Enum.HumanoidStateType.Seated then
+            if humanoid:GetState() == Enum.HumanoidStateType.Seated or humanoid:GetState() == Enum.HumanoidStateType.Climbing then
                 isOnGround = true
             end
-
-            if humanoid:GetState() == Enum.HumanoidStateType.Climbing then
-                isOnGround = true
-            end
-
+            
             if isOnGround then
                 vlCounts[player] = 0
             elseif humanoid.Health <= 0 then
