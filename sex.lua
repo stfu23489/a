@@ -87,33 +87,6 @@ function FlightBCheck()
     local prevPositions = {}
     local vlCounts = {}
     local thresholdTicks = 5
-
-    local function onCharacterAdded(player, char)
-        local humanoid = char:WaitForChild("Humanoid")
-        local characterConnection = humanoid:GetPropertyChangedSignal("Health"):Connect(function()
-            if not player then
-                print('Player is nil')
-            elseif not char then
-                print('Char is nil, Player:' .. player)
-            else
-                checkOnGround(player, char)
-            end
-        end)
-    
-        characterConnections[player] = characterConnection
-        prevPositions[player] = char:FindFirstChild("HumanoidRootPart") and char:FindFirstChild("HumanoidRootPart").Position or Vector3.new()
-    end
-    
-    local function onCharacterRemoving(player, char)
-        local characterConnection = characterConnections[player]
-        if characterConnection then
-            characterConnection:Disconnect()
-            characterConnections[player] = nil
-            prevPositions[player] = nil
-            vlCounts[player] = nil
-        end
-    end
-
     local function checkOnGround(player, character)
         if not character then
             return
@@ -162,6 +135,26 @@ function FlightBCheck()
             end
 
             prevPositions[player] = humanoidRootPart.Position
+        end
+    end
+    
+    local function onCharacterAdded(player, char)
+        local humanoid = char:WaitForChild("Humanoid")
+        local characterConnection = humanoid:GetPropertyChangedSignal("Health"):Connect(function()
+            checkOnGround(player, char)
+        end)
+    
+        characterConnections[player] = characterConnection
+        prevPositions[player] = char:FindFirstChild("HumanoidRootPart") and char:FindFirstChild("HumanoidRootPart").Position or Vector3.new()
+    end
+    
+    local function onCharacterRemoving(player, char)
+        local characterConnection = characterConnections[player]
+        if characterConnection then
+            characterConnection:Disconnect()
+            characterConnections[player] = nil
+            prevPositions[player] = nil
+            vlCounts[player] = nil
         end
     end
 
