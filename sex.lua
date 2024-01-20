@@ -200,6 +200,14 @@ local function runCoroutine(func)
 end
 
 function GroundCheck()
+    local function handleResult(player, isOnGround)
+        if isOnGround then
+            print(player.Name .. " is on the ground.")
+        else
+            print(player.Name .. " is in the air.")
+        end
+    end
+
     while true do
         for _, player in pairs(game.Players:GetPlayers()) do
             local sphere = createSphere(player)
