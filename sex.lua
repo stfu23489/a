@@ -57,24 +57,29 @@ function FlightACheck()
 
     Players.PlayerAdded:Connect(onPlayerAdded)
     Players.PlayerRemoving:Connect(onPlayerRemoving)
-    for _, player in pairs(Players:GetPlayers()) do
-        if player.Character and player.Character:FindFirstChild("Humanoid") and player.Character:FindFirstChild("Humanoid").Health > 0 then
-            local pitch = player:GetAttribute("Pitch") or 0
-            local headPitch = player:GetAttribute("HeadPitch") or 0
 
-            if headPitch ~= 0 and pitch ~= 0 and headPitch == pitch and not isPlayerSitting(player) then
-                if not violationLevels[player] then
-                    violationLevels[player] = -4
+    while true do
+        wait(0.1)
+
+        for _, player in pairs(Players:GetPlayers()) do
+            if player.Character and player.Character:FindFirstChild("Humanoid") and player.Character:FindFirstChild("Humanoid").Health > 0 then
+                local pitch = player:GetAttribute("Pitch") or 0
+                local headPitch = player:GetAttribute("HeadPitch") or 0
+
+                if headPitch ~= 0 and pitch ~= 0 and headPitch == pitch and not isPlayerSitting(player) then
+                    if not violationLevels[player] then
+                        violationLevels[player] = -4
+                    else
+                        violationLevels[player] = violationLevels[player] + 1
+                    end
                 else
-                    violationLevels[player] = violationLevels[player] + 1
+                    resetViolationLevel(player)
                 end
-            else
-                resetViolationLevel(player)
             end
         end
-    end
 
-    printFailedPlayers()
+        printFailedPlayers()
+    end
 end
 
 function FlightBCheck()
@@ -183,10 +188,23 @@ function FlightBCheck()
         end)
     end)
 
-    checkAllPlayers()
+    while wait(0.1) do
+        checkAllPlayers()
+    end
 end
 
-while wait(0.1) do
-    FlightACheck()
-    FlightBCheck()
+-- Function to run a coroutine
+local function runCoroutine(func)
+    local co = coroutine.create(func)
+    coroutine.resume(co)
+    return co
+end
+
+-- Run each function in a separate coroutine
+local coFlightA = runCoroutine(FlightACheck)
+local coFlightB = runCoroutine(FlightBCheck)
+
+-- Wait for coroutines to finish (optional)
+while coroutine.status(coFlightA) ~= "dead" and coroutine.status(coFlightB) ~= "dead" do
+    wait(0.1)
 end
