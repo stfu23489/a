@@ -82,8 +82,6 @@ function FlightACheck()
     end
 end
 
-spawn(FlightACheck())
-
 function FlightBCheck()
     local characterConnections = {}
     local prevPositions = {}
@@ -195,4 +193,5 @@ function FlightBCheck()
     end
 end
 
-spawn(FlightBCheck())
+spawn(FlightACheck)
+spawn(FlightBCheck)
