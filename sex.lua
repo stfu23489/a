@@ -76,7 +76,7 @@ function FlightACheck()
                     resetViolationLevel(player)
                 end
             end
-        end
+        }
 
         printFailedPlayers()
     end
@@ -193,25 +193,16 @@ function FlightBCheck()
     end
 end
 
+local function runCoroutine(func)
+    local co = coroutine.create(func)
+    coroutine.resume(co)
+    return co
+end
+
 function GroundCheck()
     while true do
         for _, player in pairs(game.Players:GetPlayers()) do
             local sphere = createSphere(player)
         
             if sphere then
-                local isOnGround = isPlayerOnGround(player, sphere)
-                handleResult(player, isOnGround)
-                sphere:Destroy()  -- Destroy the sphere after checking collision
-            end
-        end
-        wait(0.1)  -- Wait for 0.1 seconds after checking all players
-    end
-end
-
-local coFlightA = coroutine.create(FlightACheck)
-local coFlightB = coroutine.create(FlightBCheck)
-local coGroundCheck = coroutine.create(GroundCheck)
-
-while coroutine.status(coFlightA) ~= "dead" and coroutine.status(coFlightB) ~= "dead" and coroutine.status(coGroundCheck) ~= "dead" do
-    wait(0.1)
-end
+                local isOnGround = isPlayerOnGround(player, sphere
