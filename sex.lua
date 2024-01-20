@@ -87,39 +87,36 @@ function FlightBCheck()
     local prevPositions = {}
     local vlCounts = {}
     local thresholdTicks = 5
+    
     local function checkOnGround(player, character)
         if not character then
             return
         end
-
+    
         local humanoid = character:FindFirstChildOfClass("Humanoid")
         local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
-
+    
         if humanoid and humanoidRootPart then
             local rootPosition = humanoidRootPart.Position
-            local rayOffsets = {
-                Vector3.new(-2, 0, -2),
-                Vector3.new(2, 0, -2),
-                Vector3.new(-2, 0, 2),
-                Vector3.new(2, 0, 2)
-            }
-
+            local rayCount = 50
             local isOnGround = false
-
-            for _, offset in ipairs(rayOffsets) do
-                local ray = Ray.new(rootPosition + offset, Vector3.new(0, -5, 0))
+    
+            for i = 1, rayCount do
+                local angle = math.rad((i / rayCount) * 360)
+                local direction = Vector3.new(math.sin(angle), 0, math.cos(angle))
+                local ray = Ray.new(rootPosition, direction * -5)
                 local hit, _ = workspace:FindPartOnRay(ray, character, false, true)
-
+    
                 if hit then
                     isOnGround = true
                     break
                 end
             end
-
+    
             if humanoid:GetState() == Enum.HumanoidStateType.Seated or humanoid:GetState() == Enum.HumanoidStateType.Climbing then
                 isOnGround = true
             end
-            
+    
             if isOnGround then
                 vlCounts[player] = 0
             elseif humanoid.Health <= 0 then
@@ -128,16 +125,16 @@ function FlightBCheck()
                 vlCounts[player] = 0
             else
                 vlCounts[player] = (vlCounts[player] or 0) + 1
-
+    
                 if vlCounts[player] >= thresholdTicks then
                     print(player.Name .. " failed Flight (B) x" .. math.max((vlCounts[player] or 0) - 4, 0))
                 end
             end
-
+    
             prevPositions[player] = humanoidRootPart.Position
         end
     end
-    
+
     local function onCharacterAdded(player, char)
         local humanoid = char:WaitForChild("Humanoid")
         local characterConnection = humanoid:GetPropertyChangedSignal("Health"):Connect(function()
