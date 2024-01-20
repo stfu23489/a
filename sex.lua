@@ -32,7 +32,7 @@ function FlightACheck()
     local function printFailedPlayers()
         for player, vl in pairs(violationLevels) do
             if vl > 0 then
-                print(player.Name .. " failed Flight (A) VL: " .. vl)
+                print(player.Name .. " failed Flight (A) x" .. vl)
             end
         end
     end
@@ -86,7 +86,7 @@ function FlightBCheck()
     local characterConnections = {}
     local prevPositions = {}
     local vlCounts = {}
-    local thresholdTicks = 5 -- Number of consecutive ticks for triggering VL increment
+    local thresholdTicks = 5
 
     local function onCharacterAdded(player, char)
         local humanoid = char:WaitForChild("Humanoid")
@@ -154,7 +154,7 @@ function FlightBCheck()
                 vlCounts[player] = (vlCounts[player] or 0) + 1
 
                 if vlCounts[player] >= thresholdTicks then
-                    print(player.Name .. " failed Flight (B) VL: " .. math.max((vlCounts[player] or 0) - 4, 0) .. ".0")
+                    print(player.Name .. " failed Flight (B) x" .. math.max((vlCounts[player] or 0) - 4, 0))
                 end
             end
 
@@ -193,18 +193,15 @@ function FlightBCheck()
     end
 end
 
--- Function to run a coroutine
 local function runCoroutine(func)
     local co = coroutine.create(func)
     coroutine.resume(co)
     return co
 end
 
--- Run each function in a separate coroutine
 local coFlightA = runCoroutine(FlightACheck)
 local coFlightB = runCoroutine(FlightBCheck)
 
--- Wait for coroutines to finish (optional)
 while coroutine.status(coFlightA) ~= "dead" and coroutine.status(coFlightB) ~= "dead" do
     wait(0.1)
 end
