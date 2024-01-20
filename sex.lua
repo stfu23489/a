@@ -91,9 +91,9 @@ function FlightBCheck()
     local function onCharacterAdded(player, char)
         local humanoid = char:WaitForChild("Humanoid")
         local characterConnection = humanoid:GetPropertyChangedSignal("Health"):Connect(function()
-            if not player
+            if not player then
                 print('Player is nil')
-            elseif not char
+            elseif not char then
                 print('Char is nil, Player:' .. player)
             else
                 checkOnGround(player, char)
