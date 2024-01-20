@@ -57,7 +57,7 @@ function FlightACheck()
 
     Players.PlayerAdded:Connect(onPlayerAdded)
     Players.PlayerRemoving:Connect(onPlayerRemoving)
-
+    print('Running Flight A Check')
     while true do
         wait(0.1)
 
@@ -187,7 +187,7 @@ function FlightBCheck()
             onCharacterRemoving(player, char)
         end)
     end)
-
+    print('Running Flight B Check')
     while wait(0.1) do
         checkAllPlayers()
     end
