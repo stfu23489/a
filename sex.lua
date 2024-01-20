@@ -205,4 +205,19 @@ function GroundCheck()
             local sphere = createSphere(player)
         
             if sphere then
-                local isOnGround = isPlayerOnGround(player, sphere
+                local isOnGround = isPlayerOnGround(player, sphere)
+                handleResult(player, isOnGround)
+                sphere:Destroy()  -- Destroy the sphere after checking collision
+            end
+        end
+        wait(0.1)  -- Wait for 0.1 seconds after checking all players
+    end
+end
+
+local coFlightA = runCoroutine(FlightACheck)
+local coFlightB = runCoroutine(FlightBCheck)
+local coGroundCheck = runCoroutine(GroundCheck)
+
+while coroutine.status(coFlightA) ~= "dead" and coroutine.status(coFlightB) ~= "dead" and coroutine.status(coGroundCheck) ~= "dead" do
+    wait(0.1)
+end
