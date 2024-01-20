@@ -98,23 +98,24 @@ function FlightBCheck()
     
         if humanoid and humanoidRootPart then
             local rootPosition = humanoidRootPart.Position
-            local rayCount = 50
+            local numRaysPerSide = 8
+            local rayDistance = 0.25  -- Adjust the distance between rays as needed
             local isOnGround = false
     
-            for i = 1, rayCount do
-                local angle = math.rad((i / rayCount) * 360)
-                local direction = Vector3.new(math.sin(angle), 0, math.cos(angle))
-                local ray = Ray.new(rootPosition, direction * -5)
-            
-                print("Ray Direction:", direction)
-                print("Ray Origin:", ray.Origin)
-                print("Ray Direction * -5:", ray.Direction)
-            
-                local hit, hitPart = workspace:FindPartOnRay(ray, character, false, true)
-            
-                if hit then
-                    print("Hit something!")
-                    isOnGround = true
+            for i = 1, numRaysPerSide do
+                for j = 1, numRaysPerSide do
+                    local offsetX = -2 + (i - 1) * rayDistance
+                    local offsetZ = -2 + (j - 1) * rayDistance
+                    local ray = Ray.new(rootPosition + Vector3.new(offsetX, 0, offsetZ), Vector3.new(0, -5, 0))
+                    local hit, _ = workspace:FindPartOnRay(ray, character, false, true)
+    
+                    if hit then
+                        isOnGround = true
+                        break
+                    end
+                end
+    
+                if isOnGround then
                     break
                 end
             end
@@ -123,11 +124,15 @@ function FlightBCheck()
                 isOnGround = true
             end
     
-            if isOnGround or humanoid.Health <= 0 or (humanoidRootPart.Position.Y < (prevPositions[player] and prevPositions[player].Y or 0)) then
+            if isOnGround then
+                vlCounts[player] = 0
+            elseif humanoid.Health <= 0 then
+                vlCounts[player] = 0
+            elseif humanoidRootPart.Position.Y < (prevPositions[player] and prevPositions[player].Y or 0) then
                 vlCounts[player] = 0
             else
                 vlCounts[player] = (vlCounts[player] or 0) + 1
-            
+    
                 if vlCounts[player] >= thresholdTicks then
                     print(player.Name .. " failed Flight (B) x" .. math.max((vlCounts[player] or 0) - 4, 0))
                 end
