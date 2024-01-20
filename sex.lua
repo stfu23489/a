@@ -105,9 +105,15 @@ function FlightBCheck()
                 local angle = math.rad((i / rayCount) * 360)
                 local direction = Vector3.new(math.sin(angle), 0, math.cos(angle))
                 local ray = Ray.new(rootPosition, direction * -5)
-                local hit, _ = workspace:FindPartOnRay(ray, character, false, true)
-    
+            
+                print("Ray Direction:", direction)
+                print("Ray Origin:", ray.Origin)
+                print("Ray Direction * -5:", ray.Direction)
+            
+                local hit, hitPart = workspace:FindPartOnRay(ray, character, false, true)
+            
                 if hit then
+                    print("Hit something!")
                     isOnGround = true
                     break
                 end
@@ -117,15 +123,11 @@ function FlightBCheck()
                 isOnGround = true
             end
     
-            if isOnGround then
-                vlCounts[player] = 0
-            elseif humanoid.Health <= 0 then
-                vlCounts[player] = 0
-            elseif humanoidRootPart.Position.Y < (prevPositions[player] and prevPositions[player].Y or 0) then
+            if isOnGround or humanoid.Health <= 0 or (humanoidRootPart.Position.Y < (prevPositions[player] and prevPositions[player].Y or 0)) then
                 vlCounts[player] = 0
             else
                 vlCounts[player] = (vlCounts[player] or 0) + 1
-    
+            
                 if vlCounts[player] >= thresholdTicks then
                     print(player.Name .. " failed Flight (B) x" .. math.max((vlCounts[player] or 0) - 4, 0))
                 end
