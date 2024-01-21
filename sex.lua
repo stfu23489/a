@@ -10,28 +10,37 @@ function isPlayerSitting(player, radius)
     return false
 end
 
-function collisionCheck(player, radius)
+function collisionCheck(player, type)
     local torso = player.Character and (player.Character:FindFirstChild("Torso") or player.Character:FindFirstChild("UpperTorso"))
     
     if not torso then 
         return true 
     end
 
-    local sphere = Instance.new("Part")
-    sphere.Shape = Enum.PartType.Ball
-    sphere.Size = Vector3.new(radius, radius, radius)
-    sphere.Position = torso.Position
-    sphere.Anchored = true
-    sphere.CanCollide = false
-    sphere.Transparency = 1
-    sphere.Parent = workspace
+    if type == 7 then
+        local partChecker = Instance.new("Part")
+        partChecker.Size = Vector3.new(3, 6, 1.5)
+        partChecker.Anchored = true
+        partChecker.CanCollide = false
+        partChecker.Transparency = 1
+        partChecker.Parent = workspace
+        partChecker.CFrame = CFrame.fromMatrix(torso.Position, lookVector:Cross(upVector), torso.CFrame.upVector, -torso.CFrame.lookVector)
+    elseif type == 1 then
+        local partChecker = Instance.new("Part")
+        partChecker.Size = Vector3.new(1.5, 3, 0.75)
+        partChecker.Anchored = true
+        partChecker.CanCollide = false
+        partChecker.Transparency = 1
+        partChecker.Parent = workspace
+        partChecker.CFrame = CFrame.fromMatrix(torso.Position, lookVector:Cross(upVector), torso.CFrame.upVector, -torso.CFrame.lookVector)
+    end
 
     local region = Region3.new(sphere.Position - Vector3.new(sphere.Size.X / 2, sphere.Size.Y / 2, sphere.Size.Z / 2), sphere.Position + Vector3.new(sphere.Size.X / 2, sphere.Size.Y / 2, sphere.Size.Z / 2))
     local parts = workspace:FindPartsInRegion3WithIgnoreList(region, {player.Character, workspace.CurrentCamera, sphere}, math.huge)
 
     for _, part in ipairs(parts) do
         if part:IsA("BasePart") and part.Parent:IsA("Model") and not part.Anchored then
-            sphere:Destroy()
+            p:Destroy()
             return 'unanchored'
         end
     end
@@ -39,11 +48,11 @@ function collisionCheck(player, radius)
     local isOnGround = false
     for _, part in ipairs(parts) do
         if part:IsA("BasePart") and part.Parent:IsA("Model") then
-            sphere:Destroy()
+            partChecker:Destroy()
             return true
         end
     end
-    sphere:Destroy()
+    partChecker:Destroy()
     return false
 end
 
