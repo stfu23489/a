@@ -83,7 +83,7 @@ function FlightACheck()
 
     Players.PlayerAdded:Connect(onPlayerAdded)
     Players.PlayerRemoving:Connect(onPlayerRemoving)
-    print('Running Flight A Check')
+    print('Running Flight (Angle) Check')
     while true do
         wait(0.1)
 
@@ -105,54 +105,6 @@ function FlightACheck()
         end
 
         printFailedPlayers()
-    end
-end
-
-function SpeedCheck()
-    local playerSpeedData = {}
-    local speedVL = {}
-    while wait(0.1) do
-        for _, player in pairs(game.Players:GetPlayers()) do
-            local character = player.Character
-            local humanoid = character and character:FindFirstChildOfClass("Humanoid")
-
-            if humanoid then
-                local currentPosition = character.HumanoidRootPart.Position
-                local currentTimestamp = tick()
-
-                local speedData = playerSpeedData[player] or {}
-
-                if speedData.prevPosition and speedData.prevTimestamp then
-                    -- Calculate the distance traveled in X and Z axes
-                    local deltaX = currentPosition.X - speedData.prevPosition.X
-                    local deltaZ = currentPosition.Z - speedData.prevPosition.Z
-
-                    -- Calculate the time elapsed
-                    local deltaTime = currentTimestamp - speedData.prevTimestamp
-
-                    -- Calculate speed (distance / time)
-                    local speedXZ = math.sqrt(deltaX^2 + deltaZ^2) / deltaTime
-                    if speedXZ >= 28 then
-                        if not speedVL[player] then
-                            speedVL[player] = -4
-                        else
-                            speedVL[player] = speedVL[player] + 1
-                        end
-                    else
-                        speedVL[player] = -5
-                    end
-                    if speedVL[player] > 0 then
-                        print(player.Name, "failed Speed (Position) x" .. speedVL[player])
-                    end
-                end
-
-                -- Update previous values for the next iteration
-                playerSpeedData[player] = {
-                    prevPosition = currentPosition,
-                    prevTimestamp = currentTimestamp
-                }
-            end
-        end
     end
 end
 
@@ -233,9 +185,58 @@ function FlightBCheck()
             onCharacterRemoving(player, char)
         end)
     end)
-    print('Running Flight B Check')
+    print('Running Flight (Float) Check')
     while wait(0.1) do
         checkAllPlayers()
+    end
+end
+
+function SpeedCheck()
+    local playerSpeedData = {}
+    local speedVL = {}
+    print('Running Speed Check')
+    while wait(0.1) do
+        for _, player in pairs(game.Players:GetPlayers()) do
+            local character = player.Character
+            local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+
+            if humanoid then
+                local currentPosition = character.HumanoidRootPart.Position
+                local currentTimestamp = tick()
+
+                local speedData = playerSpeedData[player] or {}
+
+                if speedData.prevPosition and speedData.prevTimestamp then
+                    -- Calculate the distance traveled in X and Z axes
+                    local deltaX = currentPosition.X - speedData.prevPosition.X
+                    local deltaZ = currentPosition.Z - speedData.prevPosition.Z
+
+                    -- Calculate the time elapsed
+                    local deltaTime = currentTimestamp - speedData.prevTimestamp
+
+                    -- Calculate speed (distance / time)
+                    local speedXZ = math.sqrt(deltaX^2 + deltaZ^2) / deltaTime
+                    if speedXZ >= 28 then
+                        if not speedVL[player] then
+                            speedVL[player] = -4
+                        else
+                            speedVL[player] = speedVL[player] + 1
+                        end
+                    else
+                        speedVL[player] = -5
+                    end
+                    if speedVL[player] > 0 then
+                        print(player.Name, "failed Speed (Basic) x" .. speedVL[player])
+                    end
+                end
+
+                -- Update previous values for the next iteration
+                playerSpeedData[player] = {
+                    prevPosition = currentPosition,
+                    prevTimestamp = currentTimestamp
+                }
+            end
+        end
     end
 end
 
