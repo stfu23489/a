@@ -21,7 +21,7 @@ function collisionCheck(player, type)
     partChecker.Size = Vector3.new(3, 6, 1.5)
     partChecker.Anchored = true
     partChecker.CanCollide = false
-    partChecker.Transparency = 1
+    partChecker.Transparency = 0.5
     partChecker.Parent = workspace
     local lookVector = torso.CFrame.lookVector
     local upVector = torso.CFrame.upVector
