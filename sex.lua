@@ -18,14 +18,10 @@ function collisionCheck(player, type)
     end
     
     local partChecker = Instance.new("Part")
-    partChecker.Size = Vector3.new(3, 6, 1.5)
     partChecker.Anchored = true
     partChecker.CanCollide = false
     partChecker.Transparency = 0.75
     partChecker.Parent = workspace
-    local lookVector = torso.CFrame.lookVector
-    local upVector = torso.CFrame.upVector
-    partChecker.CFrame = CFrame.fromMatrix(torso.Position, lookVector:Cross(upVector), upVector, -lookVector)
     
     if type == 7 then
         partChecker.Size = Vector3.new(3, 6, 1.5)
@@ -34,16 +30,17 @@ function collisionCheck(player, type)
     else
         print('oh noes an stinky mistake happened plz report to devs :((((((((')
     end
-
+    
+    local lookVector = torso.CFrame.lookVector
+    local upVector = torso.CFrame.upVector
+    partChecker.CFrame = CFrame.fromMatrix(torso.Position, lookVector:Cross(upVector), upVector, -lookVector)
+    
     local region = Region3.new(partChecker.Position - partChecker.Size / 2, partChecker.Position + partChecker.Size / 2)
     local parts = workspace:FindPartsInRegion3WithIgnoreList(region, {player.Character, workspace.CurrentCamera, partChecker}, math.huge)
 
     for _, part in ipairs(parts) do
         if part:IsA("BasePart") and part.Parent:IsA("Model") and not (part.Parent:IsA("Player") and part.Parent == player) and not part.Anchored then
-            spawn(function()
-                wait(0.1)  -- Introduce a 0.1 second delay
-                partChecker:Destroy()
-            end)
+            partChecker:Destroy()
             return 'unanchored'
         end
     end
@@ -51,10 +48,7 @@ function collisionCheck(player, type)
     local isOnGround = false
     for _, part in ipairs(parts) do
         if part:IsA("BasePart") and part.Parent:IsA("Model") and not (part.Parent:IsA("Player") and part.Parent == player) then
-            spawn(function()
-                wait(0.1)  -- Introduce a 0.1 second delay
-                partChecker:Destroy()
-            end)
+            partChecker:Destroy()
             return true
         end
     end
