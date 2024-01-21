@@ -1,7 +1,7 @@
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 
-function isPlayerSitting(player)
+function isPlayerSitting(player, radius)
     local character = player.Character
     if character and character:FindFirstChild("Humanoid") then
         local humanoid = character:FindFirstChild("Humanoid")
@@ -10,7 +10,7 @@ function isPlayerSitting(player)
     return false
 end
 
-function collisionCheck(player)
+function collisionCheck(player, radius)
     local torso = player.Character and (player.Character:FindFirstChild("Torso") or player.Character:FindFirstChild("UpperTorso"))
     
     if not torso then 
@@ -19,7 +19,7 @@ function collisionCheck(player)
 
     local sphere = Instance.new("Part")
     sphere.Shape = Enum.PartType.Ball
-    sphere.Size = Vector3.new(7, 7, 7)
+    sphere.Size = Vector3.new(radius, radius, radius)
     sphere.Position = torso.Position
     sphere.Anchored = true
     sphere.CanCollide = false
@@ -47,75 +47,7 @@ function collisionCheck(player)
     return false
 end
 
-function FlightACheck()
-    local violationLevels = {}
-
-    local function updateLeaningStatus(player)
-        local character = player.Character
-        if character and character:FindFirstChild("Humanoid") and not isPlayerSitting(player) then
-            local torso = character:FindFirstChild("Torso") or character:FindFirstChild("UpperTorso")
-            local head = character:FindFirstChild("Head")
-
-            if torso and head then
-                local pitch = math.deg(torso.Orientation.x) / 10
-                local headPitch = math.deg(head.Orientation.x) / 10
-
-                player:SetAttribute("Pitch", math.floor(pitch + 0.5))
-                player:SetAttribute("HeadPitch", math.floor(headPitch + 0.5))
-            end
-        end
-    end
-
-    local function printFailedPlayers()
-        for player, vl in pairs(violationLevels) do
-            if vl > 0 then
-                print(player.Name, "failed Flight (Angle) x" .. vl)
-            end
-        end
-    end
-
-    RunService.Stepped:Connect(function()
-        for _, player in pairs(Players:GetPlayers()) do
-            updateLeaningStatus(player)
-        end
-    end)
-
-    local function onPlayerAdded(player)
-        violationLevels[player] = 0
-    end
-
-    local function onPlayerRemoving(player)
-        violationLevels[player] = nil
-    end
-
-    Players.PlayerAdded:Connect(onPlayerAdded)
-    Players.PlayerRemoving:Connect(onPlayerRemoving)
-    print('Running Flight (Angle) Check')
-    while true do
-        wait(0.1)
-
-        for _, player in pairs(Players:GetPlayers()) do
-            if player.Character and player.Character:FindFirstChild("Humanoid") and player.Character:FindFirstChild("Humanoid").Health > 0 then
-                local pitch = player:GetAttribute("Pitch") or 0
-                local headPitch = player:GetAttribute("HeadPitch") or 0
-
-                if headPitch ~= 0 and pitch ~= 0 and headPitch == pitch and not isPlayerSitting(player) and collisionCheck(player) ~= 'unanchored' then
-                    if not violationLevels[player] then
-                        violationLevels[player] = -4
-                    else
-                        violationLevels[player] = violationLevels[player] + 1
-                    end
-                else
-                    violationLevels[player] = -5
-                end
-            end
-        end
-
-        printFailedPlayers()
-    end
-end
-
-function FlightBCheck()
+function FlightCheck()
     local characterConnections = {}
     local prevPositions = {}
     local vlCounts = {}
@@ -132,7 +64,7 @@ function FlightBCheck()
         if humanoid and humanoidRootPart then
             local rootPosition = humanoidRootPart.Position
     
-            if collisionCheck(player) or humanoid.Health <= 0 or humanoidRootPart.Position.Y < (prevPositions[player] and prevPositions[player].Y or 0) then
+            if collisionCheck(player,7) or humanoid.Health <= 0 or humanoidRootPart.Position.Y < (prevPositions[player] and prevPositions[player].Y or 0) then
                 vlCounts[player] = 0
             else
                 vlCounts[player] = (vlCounts[player] or 0) + 1
@@ -191,7 +123,7 @@ function FlightBCheck()
             onCharacterRemoving(player, char)
         end)
     end)
-    print('Running Flight (Float) Check')
+    print('Running Flight Check')
     while wait(0.1) do
         checkAllPlayers()
     end
@@ -226,7 +158,7 @@ function SpeedCheck()
 
                         -- Calculate speed (distance / time)
                         local speedXZ = math.sqrt(deltaX^2 + deltaZ^2) / deltaTime
-                        if speedXZ >= 28 and not isPlayerSitting(player) and collisionCheck(player) ~= 'unanchored' then
+                        if speedXZ >= 28 and not isPlayerSitting(player) and collisionCheck(player,7) ~= 'unanchored' then
                             if not speedVL[player] then
                                 speedVL[player] = -4
                             else
@@ -252,16 +184,34 @@ function SpeedCheck()
     end
 end
 
+function NoclipCheck()
+    noclipVL = {}
+    print('Running Noclip Check')
+    while wait(0.1) do
+        for _, player in pairs(game.Players:GetPlayers()) do
+            if collisionCheck(player, 1) == true then
+                if not noclipVL[player] then
+                    noclipVL[player] = -4
+                else
+                    noclipVL[player] = noclipVL[player] + 1
+                end
+            else
+                noclipVL[player] = -5
+            end
+        end
+    end
+end
+
 local function runCoroutine(func)
     local co = coroutine.create(func)
     coroutine.resume(co)
     return co
 end
 
-local coFlightA = runCoroutine(FlightACheck)
-local coFlightB = runCoroutine(FlightBCheck)
+local coFlight = runCoroutine(FlightCheck)
 local coSpeed = runCoroutine(SpeedCheck)
+local coNoclip = runCoroutine(NoclipCheck)
 
-while coroutine.status(coFlightA) ~= "dead" and coroutine.status(coFlightB) ~= "dead" and coroutine.status(coSpeed) do
+while coroutine.status(coFlight) ~= "dead" and coroutine.status(coSpeed) ~= "dead" and coroutine.status(coNoclip) ~= "dead" do
     wait(0.1)
 end
