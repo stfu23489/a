@@ -23,8 +23,9 @@ function collisionCheck(player, type)
     partChecker.CanCollide = false
     partChecker.Transparency = 1
     partChecker.Parent = workspace
+    local lookVector = torso.CFrame.lookVector
     local upVector = torso.CFrame.upVector
-    partChecker.CFrame = CFrame.fromMatrix(torso.Position, lookVector:Cross(upVector), upVector, -torso.CFrame.lookVector)
+    partChecker.CFrame = CFrame.fromMatrix(torso.Position, lookVector:Cross(upVector), upVector, -lookVector)
     
     if type == 7 then
         partChecker.Size = Vector3.new(3, 6, 1.5)
