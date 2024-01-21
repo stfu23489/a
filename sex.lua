@@ -10,7 +10,7 @@ function isPlayerSitting(player)
     return false
 end
 
-function strictAirCheck(player)
+function collisionCheck(player)
     local torso = player.Character and (player.Character:FindFirstChild("Torso") or player.Character:FindFirstChild("UpperTorso"))
     
     if not torso then 
@@ -29,6 +29,14 @@ function strictAirCheck(player)
     local region = Region3.new(sphere.Position - Vector3.new(sphere.Size.X / 2, sphere.Size.Y / 2, sphere.Size.Z / 2), sphere.Position + Vector3.new(sphere.Size.X / 2, sphere.Size.Y / 2, sphere.Size.Z / 2))
     local parts = workspace:FindPartsInRegion3WithIgnoreList(region, {player.Character, workspace.CurrentCamera, sphere}, math.huge)
 
+    for _, part in ipairs(parts) do
+        if part:IsA("BasePart") and part.Parent:IsA("Model") and not part.Anchored then
+            sphere:Destroy()
+            return 'unanchored'
+        end
+    end
+
+    
     local isOnGround = false
     for _, part in ipairs(parts) do
         if part:IsA("BasePart") and part.Parent:IsA("Model") then
@@ -92,7 +100,7 @@ function FlightACheck()
                 local pitch = player:GetAttribute("Pitch") or 0
                 local headPitch = player:GetAttribute("HeadPitch") or 0
 
-                if headPitch ~= 0 and pitch ~= 0 and headPitch == pitch and not isPlayerSitting(player) then
+                if headPitch ~= 0 and pitch ~= 0 and headPitch == pitch and not isPlayerSitting(player) and collisionCheck(player) == 'unanchored' then
                     if not violationLevels[player] then
                         violationLevels[player] = -4
                     else
@@ -124,9 +132,8 @@ function FlightBCheck()
     
         if humanoid and humanoidRootPart then
             local rootPosition = humanoidRootPart.Position
-            local isOnGround = strictAirCheck(player)
     
-            if isOnGround or humanoid.Health <= 0 or humanoidRootPart.Position.Y < (prevPositions[player] and prevPositions[player].Y or 0) then
+            if collisionCheck(player) or humanoid.Health <= 0 or humanoidRootPart.Position.Y < (prevPositions[player] and prevPositions[player].Y or 0) then
                 vlCounts[player] = 0
             else
                 vlCounts[player] = (vlCounts[player] or 0) + 1
@@ -220,7 +227,7 @@ function SpeedCheck()
 
                         -- Calculate speed (distance / time)
                         local speedXZ = math.sqrt(deltaX^2 + deltaZ^2) / deltaTime
-                        if speedXZ >= 28 and not isPlayerSitting(player) then
+                        if speedXZ >= 28 and not isPlayerSitting(player) and collisionCheck(player) == 'unanchored' then
                             if not speedVL[player] then
                                 speedVL[player] = -4
                             else
