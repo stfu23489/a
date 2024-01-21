@@ -1,6 +1,15 @@
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 
+function isPlayerSitting(player)
+    local character = player.Character
+    if character and character:FindFirstChild("Humanoid") then
+        local humanoid = character:FindFirstChild("Humanoid")
+        return humanoid and humanoid:GetState() == Enum.HumanoidStateType.Seated
+    end
+    return false
+end
+
 function strictAirCheck(player)
     local torso = player.Character and (player.Character:FindFirstChild("Torso") or player.Character:FindFirstChild("UpperTorso"))
     
@@ -33,15 +42,6 @@ end
 
 function FlightACheck()
     local violationLevels = {}
-
-    local function isPlayerSitting(player)
-        local character = player.Character
-        if character and character:FindFirstChild("Humanoid") then
-            local humanoid = character:FindFirstChild("Humanoid")
-            return humanoid and humanoid:GetState() == Enum.HumanoidStateType.Seated
-        end
-        return false
-    end
 
     local function updateLeaningStatus(player)
         local character = player.Character
@@ -220,7 +220,7 @@ function SpeedCheck()
 
                         -- Calculate speed (distance / time)
                         local speedXZ = math.sqrt(deltaX^2 + deltaZ^2) / deltaTime
-                        if speedXZ >= 28 then
+                        if speedXZ >= 28 and not isPlayerSitting(player) then
                             if not speedVL[player] then
                                 speedVL[player] = -4
                             else
