@@ -34,11 +34,11 @@ function collisionCheck(player, type)
     end
 
     local region = Region3.new(partChecker.Position - partChecker.Size / 2, partChecker.Position + partChecker.Size / 2)
-    local parts = workspace:FindPartsInRegion3WithIgnoreList(region, {player.Character, workspace.CurrentCamera, sphere}, math.huge)
+    local parts = workspace:FindPartsInRegion3WithIgnoreList(region, {player.Character, workspace.CurrentCamera, partChecker}, math.huge)
 
     for _, part in ipairs(parts) do
         if part:IsA("BasePart") and part.Parent:IsA("Model") and not part.Anchored then
-            p:Destroy()
+            partChecker:Destroy()
             return 'unanchored'
         end
     end
