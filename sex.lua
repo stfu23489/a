@@ -199,7 +199,7 @@ function NoclipCheck()
                 noclipVL[player] = 0
             end
             if noclipVL[player] > 0 then
-                print(player.name, "failed Noclip x" .. noclipVL[player])
+                print(player.name, "failed Noclip (Collision) x" .. noclipVL[player])
             end
         end
     end
