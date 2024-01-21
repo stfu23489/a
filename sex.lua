@@ -62,7 +62,7 @@ function FlightACheck()
     local function printFailedPlayers()
         for player, vl in pairs(violationLevels) do
             if vl > 0 then
-                print(player.Name .. " failed Flight (Angle) x" .. vl)
+                print(player.Name, "failed Flight (Angle) x" .. vl)
             end
         end
     end
@@ -72,10 +72,6 @@ function FlightACheck()
             updateLeaningStatus(player)
         end
     end)
-
-    local function resetViolationLevel(player)
-        violationLevels[player] = 0
-    end
 
     local function onPlayerAdded(player)
         violationLevels[player] = 0
@@ -103,12 +99,60 @@ function FlightACheck()
                         violationLevels[player] = violationLevels[player] + 1
                     end
                 else
-                    resetViolationLevel(player)
+                    violationLevels[player] = -5
                 end
             end
         end
 
         printFailedPlayers()
+    end
+end
+
+function SpeedCheck()
+    local playerSpeedData = {}
+    local speedVL = {}
+    while wait(0.1) do
+        for _, player in pairs(game.Players:GetPlayers()) do
+            local character = player.Character
+            local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+
+            if humanoid then
+                local currentPosition = character.HumanoidRootPart.Position
+                local currentTimestamp = tick()
+
+                local speedData = playerSpeedData[player] or {}
+
+                if speedData.prevPosition and speedData.prevTimestamp then
+                    -- Calculate the distance traveled in X and Z axes
+                    local deltaX = currentPosition.X - speedData.prevPosition.X
+                    local deltaZ = currentPosition.Z - speedData.prevPosition.Z
+
+                    -- Calculate the time elapsed
+                    local deltaTime = currentTimestamp - speedData.prevTimestamp
+
+                    -- Calculate speed (distance / time)
+                    local speedXZ = math.sqrt(deltaX^2 + deltaZ^2) / deltaTime
+                    if speedXZ >= 28 then
+                        if not speedVL[player] then
+                            speedVL[player] = -4
+                        else
+                            speedVL[player] = speedVL[player] + 1
+                        end
+                    else
+                        speedVL[player] = -5
+                    end
+                    if speedVL[player] > 0 then
+                        print(player.Name, "failed Speed (Position) x" .. speedVL[player])
+                    end
+                end
+
+                -- Update previous values for the next iteration
+                playerSpeedData[player] = {
+                    prevPosition = currentPosition,
+                    prevTimestamp = currentTimestamp
+                }
+            end
+        end
     end
 end
 
@@ -130,17 +174,13 @@ function FlightBCheck()
             local rootPosition = humanoidRootPart.Position
             local isOnGround = strictAirCheck(player)
     
-            if isOnGround then
-                vlCounts[player] = 0
-            elseif humanoid.Health <= 0 then
-                vlCounts[player] = 0
-            elseif humanoidRootPart.Position.Y < (prevPositions[player] and prevPositions[player].Y or 0) then
+            if isOnGround or humanoid.Health <= 0 or humanoidRootPart.Position.Y < (prevPositions[player] and prevPositions[player].Y or 0) then
                 vlCounts[player] = 0
             else
                 vlCounts[player] = (vlCounts[player] or 0) + 1
     
                 if vlCounts[player] >= thresholdTicks then
-                    print(player.Name .. " failed Flight (Float) x" .. math.max((vlCounts[player] or 0) - 4, 0))
+                    print(player.Name, "failed Flight (Float) x" .. math.max((vlCounts[player] or 0) - 4, 0))
                 end
             end
     
@@ -207,7 +247,8 @@ end
 
 local coFlightA = runCoroutine(FlightACheck)
 local coFlightB = runCoroutine(FlightBCheck)
+local coSpeed = runCoroutine(SpeedCheck)
 
-while coroutine.status(coFlightA) ~= "dead" and coroutine.status(coFlightB) ~= "dead" do
+while coroutine.status(coFlightA) ~= "dead" and coroutine.status(coFlightB) ~= "dead" and coroutine.status(coSpeed) do
     wait(0.1)
 end
