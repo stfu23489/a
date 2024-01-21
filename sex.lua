@@ -62,7 +62,7 @@ function FlightACheck()
     local function printFailedPlayers()
         for player, vl in pairs(violationLevels) do
             if vl > 0 then
-                print(player.Name .. " failed Flight (A) x" .. vl)
+                print(player.Name .. " failed Flight (Angle) x" .. vl)
             end
         end
     end
@@ -140,7 +140,7 @@ function FlightBCheck()
                 vlCounts[player] = (vlCounts[player] or 0) + 1
     
                 if vlCounts[player] >= thresholdTicks then
-                    print(player.Name .. " failed Flight (B) x" .. math.max((vlCounts[player] or 0) - 4, 0))
+                    print(player.Name .. " failed Flight (Float) x" .. math.max((vlCounts[player] or 0) - 4, 0))
                 end
             end
     
