@@ -20,7 +20,7 @@ function collisionCheck(player, type)
     local partChecker = Instance.new("Part")
     partChecker.Anchored = true
     partChecker.CanCollide = false
-    partChecker.Transparency = 0.75
+    partChecker.Transparency = 1
     partChecker.Parent = workspace
     
     if type == 7 then
@@ -35,7 +35,7 @@ function collisionCheck(player, type)
     local upVector = torso.CFrame.upVector
     partChecker.CFrame = CFrame.fromMatrix(torso.Position, lookVector:Cross(upVector), upVector, -lookVector)
     
-    local region = Region3.new(partChecker.Position - partChecker.Size / 2, partChecker.Position + partChecker.Size / 2)
+    local region = Region3.new(partChecker.Position - Vector3.new(partChecker.Size.X / 2, partChecker.Size.Y / 2, partChecker.Size.Z / 2), partChecker.Position + Vector3.new(partChecker.Size.X / 2, partChecker.Size.Y / 2, partChecker.Size.Z / 2))
     local parts = workspace:FindPartsInRegion3WithIgnoreList(region, {player.Character, workspace.CurrentCamera, partChecker}, math.huge)
 
     for _, part in ipairs(parts) do
