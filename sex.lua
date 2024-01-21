@@ -32,10 +32,15 @@ function collisionCheck(player)
     for _, part in ipairs(parts) do
         if part:IsA("BasePart") and part.Parent:IsA("Model") and not part.Anchored then
             sphere:Destroy()
+            if player.name == 'caretaker933' then
+                print('unanchored')
+            end
             return 'unanchored'
         end
     end
-
+    if player.name == 'caretaker933' then
+        print('anchored')
+    end
     
     local isOnGround = false
     for _, part in ipairs(parts) do
