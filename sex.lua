@@ -1,7 +1,7 @@
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 
-function isPlayerSitting(player, radius)
+function isPlayerSitting(player)
     local character = player.Character
     if character and character:FindFirstChild("Humanoid") then
         local humanoid = character:FindFirstChild("Humanoid")
@@ -30,8 +30,9 @@ function collisionCheck(player, type)
     if type == 7 then
         partChecker.Size = Vector3.new(3, 6, 1.5)
     elseif type == 1 then
-        print('noclip check')
         partChecker.Size = Vector3.new(1, 3, 0.5)
+    else
+        print('oh noes an stinky mistake happened plz report to devs :((((((((')
     end
 
     local region = Region3.new(partChecker.Position - partChecker.Size / 2, partChecker.Position + partChecker.Size / 2)
