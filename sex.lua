@@ -21,7 +21,7 @@ function collisionCheck(player, type)
     partChecker.Size = Vector3.new(3, 6, 1.5)
     partChecker.Anchored = true
     partChecker.CanCollide = false
-    partChecker.Transparency = 0.25
+    partChecker.Transparency = 0.75
     partChecker.Parent = workspace
     local lookVector = torso.CFrame.lookVector
     local upVector = torso.CFrame.upVector
@@ -44,7 +44,6 @@ function collisionCheck(player, type)
                 wait(0.1)  -- Introduce a 0.1 second delay
                 partChecker:Destroy()
             end)
-            partChecker:Destroy()
             return 'unanchored'
         end
     end
@@ -56,7 +55,6 @@ function collisionCheck(player, type)
                 wait(0.1)  -- Introduce a 0.1 second delay
                 partChecker:Destroy()
             end)
-            partChecker:Destroy()
             return true
         end
     end
