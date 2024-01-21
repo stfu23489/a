@@ -191,12 +191,15 @@ function NoclipCheck()
         for _, player in pairs(game.Players:GetPlayers()) do
             if collisionCheck(player, 1) == true then
                 if not noclipVL[player] then
-                    noclipVL[player] = -4
+                    noclipVL[player] = 1
                 else
                     noclipVL[player] = noclipVL[player] + 1
                 end
             else
-                noclipVL[player] = -5
+                noclipVL[player] = 0
+            end
+            if noclipVL[player] > 0 then
+                print(player.name, "failed Noclip x" .. noclipVL[player])
             end
         end
     end
