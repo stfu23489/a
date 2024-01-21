@@ -37,7 +37,7 @@ function collisionCheck(player, type)
     local parts = workspace:FindPartsInRegion3WithIgnoreList(region, {player.Character, workspace.CurrentCamera, partChecker}, math.huge)
 
     for _, part in ipairs(parts) do
-        if part:IsA("BasePart") and part.Parent:IsA("Model") and not part.Anchored then
+        if part:IsA("BasePart") and part.Parent:IsA("Model") and not (part.Parent:IsA("Player") and part.Parent == player) and not part.Anchored then
             partChecker:Destroy()
             return 'unanchored'
         end
@@ -45,7 +45,7 @@ function collisionCheck(player, type)
     
     local isOnGround = false
     for _, part in ipairs(parts) do
-        if part:IsA("BasePart") and part.Parent:IsA("Model") then
+        if part:IsA("BasePart") and part.Parent:IsA("Model") and not (part.Parent:IsA("Player") and part.Parent == player) then
             partChecker:Destroy()
             return true
         end
