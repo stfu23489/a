@@ -16,23 +16,20 @@ function collisionCheck(player, type)
     if not torso then 
         return true 
     end
-
+    
+    local partChecker = Instance.new("Part")
+    partChecker.Size = Vector3.new(3, 6, 1.5)
+    partChecker.Anchored = true
+    partChecker.CanCollide = false
+    partChecker.Transparency = 1
+    partChecker.Parent = workspace
+    local upVector = torso.CFrame.upVector
+    partChecker.CFrame = CFrame.fromMatrix(torso.Position, lookVector:Cross(upVector), upVector, -torso.CFrame.lookVector)
+    
     if type == 7 then
-        local partChecker = Instance.new("Part")
         partChecker.Size = Vector3.new(3, 6, 1.5)
-        partChecker.Anchored = true
-        partChecker.CanCollide = false
-        partChecker.Transparency = 1
-        partChecker.Parent = workspace
-        partChecker.CFrame = CFrame.fromMatrix(torso.Position, lookVector:Cross(upVector), torso.CFrame.upVector, -torso.CFrame.lookVector)
     elseif type == 1 then
-        local partChecker = Instance.new("Part")
         partChecker.Size = Vector3.new(1.5, 3, 0.75)
-        partChecker.Anchored = true
-        partChecker.CanCollide = false
-        partChecker.Transparency = 1
-        partChecker.Parent = workspace
-        partChecker.CFrame = CFrame.fromMatrix(torso.Position, lookVector:Cross(upVector), torso.CFrame.upVector, -torso.CFrame.lookVector)
     end
 
     local region = Region3.new(sphere.Position - Vector3.new(sphere.Size.X / 2, sphere.Size.Y / 2, sphere.Size.Z / 2), sphere.Position + Vector3.new(sphere.Size.X / 2, sphere.Size.Y / 2, sphere.Size.Z / 2))
