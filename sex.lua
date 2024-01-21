@@ -1,6 +1,36 @@
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 
+function strictAirCheck(player)
+    local torso = player.Character and (player.Character:FindFirstChild("Torso") or player.Character:FindFirstChild("UpperTorso"))
+    
+    if not torso then 
+        return true 
+    end
+
+    local sphere = Instance.new("Part")
+    sphere.Shape = Enum.PartType.Ball
+    sphere.Size = Vector3.new(7, 7, 7)
+    sphere.Position = torso.Position
+    sphere.Anchored = true
+    sphere.CanCollide = false
+    sphere.Transparency = 1
+    sphere.Parent = workspace
+
+    local region = Region3.new(sphere.Position - Vector3.new(sphere.Size.X / 2, sphere.Size.Y / 2, sphere.Size.Z / 2), sphere.Position + Vector3.new(sphere.Size.X / 2, sphere.Size.Y / 2, sphere.Size.Z / 2))
+    local parts = workspace:FindPartsInRegion3WithIgnoreList(region, {player.Character, workspace.CurrentCamera, sphere}, math.huge)
+
+    local isOnGround = false
+    for _, part in ipairs(parts) do
+        if part:IsA("BasePart") and part.Parent:IsA("Model") then
+            sphere:Destroy()
+            return true
+        end
+    end
+    sphere:Destroy()
+    return false
+end
+
 function FlightACheck()
     local violationLevels = {}
 
@@ -76,7 +106,7 @@ function FlightACheck()
                     resetViolationLevel(player)
                 end
             end
-        }
+        end
 
         printFailedPlayers()
     end
@@ -98,31 +128,7 @@ function FlightBCheck()
     
         if humanoid and humanoidRootPart then
             local rootPosition = humanoidRootPart.Position
-            local numRaysPerSide = 8
-            local rayDistance = 0.25  -- Adjust the distance between rays as needed
-            local isOnGround = false
-    
-            for i = 1, numRaysPerSide do
-                for j = 1, numRaysPerSide do
-                    local offsetX = -2 + (i - 1) * rayDistance
-                    local offsetZ = -2 + (j - 1) * rayDistance
-                    local ray = Ray.new(rootPosition + Vector3.new(offsetX, 0, offsetZ), Vector3.new(0, -5, 0))
-                    local hit, _ = workspace:FindPartOnRay(ray, character, false, true)
-    
-                    if hit then
-                        isOnGround = true
-                        break
-                    end
-                end
-    
-                if isOnGround then
-                    break
-                end
-            end
-    
-            if humanoid:GetState() == Enum.HumanoidStateType.Seated or humanoid:GetState() == Enum.HumanoidStateType.Climbing then
-                isOnGround = true
-            end
+            local isOnGround = strictAirCheck(player)
     
             if isOnGround then
                 vlCounts[player] = 0
@@ -199,33 +205,9 @@ local function runCoroutine(func)
     return co
 end
 
-function GroundCheck()
-    local function handleResult(player, isOnGround)
-        if isOnGround then
-            print(player.Name .. " is on the ground.")
-        else
-            print(player.Name .. " is in the air.")
-        end
-    end
-
-    while true do
-        for _, player in pairs(game.Players:GetPlayers()) do
-            local sphere = createSphere(player)
-        
-            if sphere then
-                local isOnGround = isPlayerOnGround(player, sphere)
-                handleResult(player, isOnGround)
-                sphere:Destroy()  -- Destroy the sphere after checking collision
-            end
-        end
-        wait(0.1)  -- Wait for 0.1 seconds after checking all players
-    end
-end
-
 local coFlightA = runCoroutine(FlightACheck)
 local coFlightB = runCoroutine(FlightBCheck)
-local coGroundCheck = runCoroutine(GroundCheck)
 
-while coroutine.status(coFlightA) ~= "dead" and coroutine.status(coFlightB) ~= "dead" and coroutine.status(coGroundCheck) ~= "dead" do
+while coroutine.status(coFlightA) ~= "dead" and coroutine.status(coFlightB) ~= "dead" do
     wait(0.1)
 end
