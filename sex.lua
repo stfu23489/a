@@ -30,6 +30,7 @@ function collisionCheck(player, type)
     if type == 7 then
         partChecker.Size = Vector3.new(3, 6, 1.5)
     elseif type == 1 then
+        print('noclip check')
         partChecker.Size = Vector3.new(1, 3, 0.5)
     end
 
