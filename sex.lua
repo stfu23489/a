@@ -33,7 +33,7 @@ function collisionCheck(player, type)
         partChecker.Size = Vector3.new(1.5, 3, 0.75)
     end
 
-    local region = Region3.new(sphere.Position - Vector3.new(sphere.Size.X / 2, sphere.Size.Y / 2, sphere.Size.Z / 2), sphere.Position + Vector3.new(sphere.Size.X / 2, sphere.Size.Y / 2, sphere.Size.Z / 2))
+    local region = Region3.new(partChecker.Position - partChecker.Size / 2, partChecker.Position + partChecker.Size / 2)
     local parts = workspace:FindPartsInRegion3WithIgnoreList(region, {player.Character, workspace.CurrentCamera, sphere}, math.huge)
 
     for _, part in ipairs(parts) do
