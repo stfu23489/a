@@ -195,46 +195,52 @@ function SpeedCheck()
     local playerSpeedData = {}
     local speedVL = {}
     print('Running Speed Check')
+    
     while wait(0.1) do
         for _, player in pairs(game.Players:GetPlayers()) do
             local character = player.Character
-            local humanoid = character and character:FindFirstChildOfClass("Humanoid")
 
-            if humanoid then
-                local currentPosition = character.HumanoidRootPart.Position
-                local currentTimestamp = tick()
+            if character then
+                local humanoid = character:FindFirstChildOfClass("Humanoid")
+                local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
 
-                local speedData = playerSpeedData[player] or {}
+                if humanoid and humanoidRootPart then
+                    local currentPosition = humanoidRootPart.Position
+                    local currentTimestamp = tick()
 
-                if speedData.prevPosition and speedData.prevTimestamp then
-                    -- Calculate the distance traveled in X and Z axes
-                    local deltaX = currentPosition.X - speedData.prevPosition.X
-                    local deltaZ = currentPosition.Z - speedData.prevPosition.Z
+                    local speedData = playerSpeedData[player] or {}
 
-                    -- Calculate the time elapsed
-                    local deltaTime = currentTimestamp - speedData.prevTimestamp
+                    if speedData.prevPosition and speedData.prevTimestamp then
+                        -- Calculate the distance traveled in X and Z axes
+                        local deltaX = currentPosition.X - speedData.prevPosition.X
+                        local deltaZ = currentPosition.Z - speedData.prevPosition.Z
 
-                    -- Calculate speed (distance / time)
-                    local speedXZ = math.sqrt(deltaX^2 + deltaZ^2) / deltaTime
-                    if speedXZ >= 28 then
-                        if not speedVL[player] then
-                            speedVL[player] = -4
+                        -- Calculate the time elapsed
+                        local deltaTime = currentTimestamp - speedData.prevTimestamp
+
+                        -- Calculate speed (distance / time)
+                        local speedXZ = math.sqrt(deltaX^2 + deltaZ^2) / deltaTime
+                        if speedXZ >= 28 then
+                            if not speedVL[player] then
+                                speedVL[player] = -4
+                            else
+                                speedVL[player] = speedVL[player] + 1
+                            end
                         else
-                            speedVL[player] = speedVL[player] + 1
+                            speedVL[player] = -5
                         end
-                    else
-                        speedVL[player] = -5
-                    end
-                    if speedVL[player] > 0 then
-                        print(player.Name, "failed Speed (Basic) x" .. speedVL[player])
-                    end
-                end
 
-                -- Update previous values for the next iteration
-                playerSpeedData[player] = {
-                    prevPosition = currentPosition,
-                    prevTimestamp = currentTimestamp
-                }
+                        if speedVL[player] > 0 then
+                            print(player.Name, "failed Speed (Basic) x" .. speedVL[player])
+                        end
+                    end
+
+                    -- Update previous values for the next iteration
+                    playerSpeedData[player] = {
+                        prevPosition = currentPosition,
+                        prevTimestamp = currentTimestamp
+                    }
+                end
             end
         end
     end
