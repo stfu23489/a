@@ -32,14 +32,8 @@ function collisionCheck(player)
     for _, part in ipairs(parts) do
         if part:IsA("BasePart") and part.Parent:IsA("Model") and not part.Anchored then
             sphere:Destroy()
-            if player.name == 'caretaker933' then
-                print('unanchored')
-            end
             return 'unanchored'
         end
-    end
-    if player.name == 'caretaker933' then
-        print('anchored')
     end
     
     local isOnGround = false
@@ -105,7 +99,7 @@ function FlightACheck()
                 local pitch = player:GetAttribute("Pitch") or 0
                 local headPitch = player:GetAttribute("HeadPitch") or 0
 
-                if headPitch ~= 0 and pitch ~= 0 and headPitch == pitch and not isPlayerSitting(player) and collisionCheck(player) == 'unanchored' then
+                if headPitch ~= 0 and pitch ~= 0 and headPitch == pitch and not isPlayerSitting(player) and collisionCheck(player) ~= 'unanchored' then
                     if not violationLevels[player] then
                         violationLevels[player] = -4
                     else
@@ -232,7 +226,7 @@ function SpeedCheck()
 
                         -- Calculate speed (distance / time)
                         local speedXZ = math.sqrt(deltaX^2 + deltaZ^2) / deltaTime
-                        if speedXZ >= 28 and not isPlayerSitting(player) and collisionCheck(player) == 'unanchored' then
+                        if speedXZ >= 28 and not isPlayerSitting(player) and collisionCheck(player) ~= 'unanchored' then
                             if not speedVL[player] then
                                 speedVL[player] = -4
                             else
