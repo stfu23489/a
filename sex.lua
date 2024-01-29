@@ -38,7 +38,7 @@ function collisionCheck(player, type)
     local upVector = torso.CFrame.upVector
     partChecker.CFrame = CFrame.fromMatrix(torso.Position, lookVector:Cross(upVector), upVector, -lookVector)
     
-    local region = Region3.new(partChecker.Position - Vector3.new(partChecker.Size.X / 2, partChecker.Size.Y / 2, partChecker.Size.Z / 2), partChecker.Position + Vector3.new(partChecker.Size.X / 2, partChecker.Size.Y / 2, partChecker.Size.Z / 2))
+    local region = Region3.new(partChecker.Position - Vector3.new(partChecker.Size.X / 2 + 0.1, partChecker.Size.Y / 2 + 0.1, partChecker.Size.Z / 2 + 0.1), partChecker.Position + Vector3.new(partChecker.Size.X / 2 + 0.1, partChecker.Size.Y / 2 + 0.1, partChecker.Size.Z / 2 + 0.1))
     local parts = workspace:FindPartsInRegion3WithIgnoreList(region, {player.Character, workspace.CurrentCamera, partChecker}, math.huge)
 
     local hasUnanchored = false
