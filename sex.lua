@@ -10,6 +10,9 @@ function isPlayerSitting(player)
     return false
 end
 
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+
 function collisionCheck(player, type)
     local torso = player.Character and (player.Character:FindFirstChild("Torso") or player.Character:FindFirstChild("UpperTorso"))
     
@@ -28,7 +31,7 @@ function collisionCheck(player, type)
     elseif type == 1 then
         partChecker.Size = Vector3.new(1.5, 3, 0.75)
     else
-        print('oh noes an stinky mistake happened plz report to devs :((((((((')
+        print('oh noes a stinky mistake happened plz report to devs :((((((((')
     end
     
     local lookVector = torso.CFrame.lookVector
@@ -38,22 +41,25 @@ function collisionCheck(player, type)
     local region = Region3.new(partChecker.Position - Vector3.new(partChecker.Size.X / 2, partChecker.Size.Y / 2, partChecker.Size.Z / 2), partChecker.Position + Vector3.new(partChecker.Size.X / 2, partChecker.Size.Y / 2, partChecker.Size.Z / 2))
     local parts = workspace:FindPartsInRegion3WithIgnoreList(region, {player.Character, workspace.CurrentCamera, partChecker}, math.huge)
 
+    local hasUnanchored = false
+    local isOnGround = false
+
     for _, part in ipairs(parts) do
         if part:IsA("BasePart") and part.Parent:IsA("Model") and not (part.Parent:IsA("Player") and part.Parent == player) and not part.Anchored then
-            partChecker:Destroy()
-            return 'unanchored'
+            hasUnanchored = true
+            break
+        elseif part:IsA("BasePart") and part.Parent:IsA("Model") and not (part.Parent:IsA("Player") and part.Parent == player) then
+            isOnGround = true
         end
     end
-    
-    local isOnGround = false
-    for _, part in ipairs(parts) do
-        if part:IsA("BasePart") and part.Parent:IsA("Model") and not (part.Parent:IsA("Player") and part.Parent == player) then
-            partChecker:Destroy()
-            return true
-        end
-    end
+
     partChecker:Destroy()
-    return false
+
+    if hasUnanchored then
+        return 'unanchored'
+    else
+        return isOnGround
+    end
 end
 
 function FlightCheck()
