@@ -29,7 +29,7 @@ function collisionCheck(player, type)
     if type == 7 then
         partChecker.Size = Vector3.new(3, 6, 1.5)
     elseif type == 1 then
-        partChecker.Size = Vector3.new(1.5, 3, 0.75)
+        partChecker.Size = Vector3.new(0.5, 1, 0.25)
     else
         print('oh noes a stinky mistake happened plz report to devs :((((((((')
     end
