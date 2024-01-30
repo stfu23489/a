@@ -29,7 +29,7 @@ function collisionCheck(player, type)
     if type == 7 then
         partChecker.Size = Vector3.new(3, 6, 1.5)
     elseif type == 1 then
-        partChecker.Size = Vector3.new(0.5, 1, 0.25)
+        partChecker.Size = Vector3.new(0.25, 0.25, 0.25)
     else
         print('oh noes a stinky mistake happened plz report to devs :((((((((')
     end
@@ -204,7 +204,7 @@ function NoclipCheck()
     print('Running Noclip Check')
     while wait(0.1) do
         for _, player in pairs(game.Players:GetPlayers()) do
-            if collisionCheck(player, 1) == true then
+            if collisionCheck(player, 1) == true and not isPlayerSitting(player) then
                 if not noclipVL[player] then
                     noclipVL[player] = 1
                 else
