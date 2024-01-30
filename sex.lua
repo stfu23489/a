@@ -29,7 +29,7 @@ function collisionCheck(player, type)
     if type == 7 then
         partChecker.Size = Vector3.new(3, 6, 1.5)
     elseif type == 1 then
-        partChecker.Size = Vector3.new(0.25, 0.25, 0.25)
+        partChecker.Size = Vector3.new(0.05, 0.05, 0.05)
     else
         print('oh noes a stinky mistake happened plz report to devs :((((((((')
     end
@@ -47,7 +47,6 @@ function collisionCheck(player, type)
     for _, part in ipairs(parts) do
         if part:IsA("BasePart") and part.Parent:IsA("Model") and not (part.Parent:IsA("Player") and part.Parent == player) and not part.Anchored then
             hasUnanchored = true
-            break
         elseif part:IsA("BasePart") and part.Parent:IsA("Model") and not (part.Parent:IsA("Player") and part.Parent == player) then
             isOnGround = true
         end
@@ -204,7 +203,7 @@ function NoclipCheck()
     print('Running Noclip Check')
     while wait(0.1) do
         for _, player in pairs(game.Players:GetPlayers()) do
-            if collisionCheck(player, 1) == true and not isPlayerSitting(player) then
+            if collisionCheck(player, 1) == true and not isPlayerSitting(player) and then
                 if not noclipVL[player] then
                     noclipVL[player] = 1
                 else
