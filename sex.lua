@@ -199,28 +199,6 @@ function SpeedCheck()
     end
 end
 
-function NoclipCheck()
-    noclipVL = {}
-    print('Running Noclip Check')
-    while wait(0.1) do
-        for _, player in pairs(game.Players:GetPlayers()) do
-            local humanoid = (player.Character and player.Character:FindFirstChildOfClass("Humanoid"))
-            if humanoid and humanoid:GetState() ~= Enum.HumanoidStateType.Climbing and collisionCheck(player, 1) == true and not isPlayerSitting(player) and humanoid.Health > 0 then
-                if not noclipVL[player] then
-                    noclipVL[player] = 1
-                else
-                    noclipVL[player] = noclipVL[player] + 1
-                end
-            else
-                noclipVL[player] = 0
-            end
-            if noclipVL[player] > 0 then
-                print(player.name, "failed Noclip (Collision) x" .. noclipVL[player])
-            end
-        end
-    end
-end
-
 local function runCoroutine(func)
     local co = coroutine.create(func)
     coroutine.resume(co)
@@ -229,8 +207,7 @@ end
 
 local coFlight = runCoroutine(FlightCheck)
 local coSpeed = runCoroutine(SpeedCheck)
-local coNoclip = runCoroutine(NoclipCheck)
 
-while coroutine.status(coFlight) ~= "dead" and coroutine.status(coSpeed) ~= "dead" and coroutine.status(coNoclip) ~= "dead" do
+while coroutine.status(coFlight) ~= "dead" and coroutine.status(coSpeed) ~= "dead" do
     wait(0.1)
 end
