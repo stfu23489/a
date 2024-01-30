@@ -29,7 +29,7 @@ function collisionCheck(player, type)
     if type == 7 then
         partChecker.Size = Vector3.new(3, 6, 1.5)
     elseif type == 1 then
-        partChecker.Size = Vector3.new(0.05, 0.05, 0.05)
+        partChecker.Size = Vector3.new(0.01, 0.01, 0.01)
     else
         print('oh noes a stinky mistake happened plz report to devs :((((((((')
     end
@@ -204,7 +204,8 @@ function NoclipCheck()
     print('Running Noclip Check')
     while wait(0.1) do
         for _, player in pairs(game.Players:GetPlayers()) do
-            if collisionCheck(player, 1) == true and not isPlayerSitting(player) and (game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()):WaitForChild("Humanoid").Health > 0 then
+            local humanoid = (player.Character and player.Character:FindFirstChildOfClass("Humanoid"))
+            if humanoid and humanoid:GetState() ~= Enum.HumanoidStateType.Climbing and collisionCheck(player, 1) == true and not isPlayerSitting(player) and humanoid.Health > 0 then
                 if not noclipVL[player] then
                     noclipVL[player] = 1
                 else
