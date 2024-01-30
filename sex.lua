@@ -63,85 +63,70 @@ function collisionCheck(player, type)
 end
 
 function FlightCheck()
-    local characterConnections = {}
-    local prevPositions = {}
-    local vlCounts = {}
-    local thresholdTicks = 5
-    
-    local function checkOnGround(player, character)
-        if not character then
-            return
-        end
-    
-        local humanoid = character:FindFirstChildOfClass("Humanoid")
-        local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
-    
-        if humanoid and humanoidRootPart then
-            local rootPosition = humanoidRootPart.Position
-    
-            if collisionCheck(player,7) or humanoid.Health <= 0 or humanoidRootPart.Position.Y < (prevPositions[player] and prevPositions[player].Y or 0) then
-                vlCounts[player] = 0
-            else
-                vlCounts[player] = (vlCounts[player] or 0) + 1
-    
-                if vlCounts[player] >= thresholdTicks then
-                    print(player.Name, "failed Flight (Float) x" .. math.max((vlCounts[player] or 0) - 4, 0))
-                end
-            end
-    
-            prevPositions[player] = humanoidRootPart.Position
-        end
-    end
+    local Player = game.Players.LocalPlayer
 
-    local function onCharacterAdded(player, char)
-        local humanoid = char:WaitForChild("Humanoid")
-        local characterConnection = humanoid:GetPropertyChangedSignal("Health"):Connect(function()
-            checkOnGround(player, char)
-        end)
-    
-        characterConnections[player] = characterConnection
-        prevPositions[player] = char:FindFirstChild("HumanoidRootPart") and char:FindFirstChild("HumanoidRootPart").Position or Vector3.new()
+    local function getPlayerCharacter()
+        return Player.Character or Player.CharacterAdded:Wait()
     end
     
-    local function onCharacterRemoving(player, char)
-        local characterConnection = characterConnections[player]
-        if characterConnection then
-            characterConnection:Disconnect()
-            characterConnections[player] = nil
-            prevPositions[player] = nil
-            vlCounts[player] = nil
-        end
+    local function getRootPart(character)
+        return character:FindFirstChild("HumanoidRootPart")
     end
-
-    local function checkAllPlayers()
-        for _, player in pairs(Players:GetPlayers()) do
-            local character = player.Character
-            if character then
-                checkOnGround(player, character)
-            end
-        end
+    
+    local function getHumanoid(character)
+        return character:FindFirstChild("Humanoid")
     end
-
-    Players.PlayerAdded:Connect(function(player)
-        local character = player.Character
-        if character then
-            onCharacterAdded(player, character)
-        end
-
-        vlCounts[player] = 0
-
-        player.CharacterAdded:Connect(function(char)
-            onCharacterAdded(player, char)
-        end)
-
-        player.CharacterRemoving:Connect(function(char)
-            onCharacterRemoving(player, char)
-        end)
-    end)
-    print('Running Flight Check')
+    
+    local character
+    local humanoid
+    local rootPart
+    
+    local lastVelocity = Vector3.new(0, 0, 0)
+    local lastTime = tick()
+    
+    local function onCharacterAdded(newCharacter)
+        character = newCharacter
+        humanoid = getHumanoid(character)
+        rootPart = getRootPart(character)
+    end
+    
+    local function onCharacterRemoved()
+        character = nil
+        humanoid = nil
+        rootPart = nil
+    end
+    
+    Player.CharacterAdded:Connect(onCharacterAdded)
+    Player.CharacterRemoving:Connect(onCharacterRemoved)
+    
     while wait(0.1) do
-        checkAllPlayers()
+        if not character or not humanoid or not rootPart then
+            character = getPlayerCharacter()
+            humanoid = getHumanoid(character)
+            rootPart = getRootPart(character)
+    
+            if not character or not humanoid or not rootPart then
+                print("Player character no longer exists.")
+                continue  -- Skip the rest of the loop iteration if the player character is still missing
+            end
+        end
+    
+        local currentVelocity = rootPart.Velocity
+        local currentTime = tick()
+    
+        local deltaVelocity = currentVelocity - lastVelocity
+        local deltaTime = currentTime - lastTime
+    
+        local verticalAcceleration = math.round(deltaVelocity.Y / deltaTime*100)/100
+    
+        if verticalAcceleration ~= 0 then
+            print("Vertical Acceleration:", verticalAcceleration)
+        end
+    
+        lastVelocity = currentVelocity
+        lastTime = currentTime
     end
+
 end
 
 function SpeedCheck()
