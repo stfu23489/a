@@ -16,7 +16,6 @@ local HasGamepass,UserInputService = game:GetService("MarketplaceService"):UserO
 local GlobalVar = ((getgenv and getgenv()) or _G)
 local Unloaded = false
 local CriminalCFRAME = workspace["Criminals Spawn"].SpawnLocation.CFrame
-local API_Prem = false
 local PremiumActivated = true
 print('premium activated')
 
@@ -3344,7 +3343,7 @@ end
 local blackperson; blackperson = hookfunction(game.Destroy,function(a)
 	local isExploit = checkcaller()
 	if a and a:IsA("Player") and not Unloaded and isExploit  then
-		if API_Prem.CheckPremium(a) then
+		if false then
 			task.spawn(function()
 				pcall(function()
 					game:GetService("Players").LocalPlayer:Kick("TAMPER DETECTED")
@@ -3363,7 +3362,7 @@ MT.__namecall = newcclosure(function(self, ...)
 	local isExploit = checkcaller()
 	if Method:lower() == "destroy" or Method:lower() == "remove" and Unloaded == false then
 		if self.IsA(self, "Player") and isExploit then
-			if API_Prem.CheckPremium(self) then
+			if false then
 				task.spawn(function()
 					pcall(function()
 						game:GetService("Players").LocalPlayer:Kick("TAMPER DETECTED")
