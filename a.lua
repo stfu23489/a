@@ -16,7 +16,7 @@ local HasGamepass,UserInputService = game:GetService("MarketplaceService"):UserO
 local GlobalVar = ((getgenv and getgenv()) or _G)
 local Unloaded = false
 local CriminalCFRAME = workspace["Criminals Spawn"].SpawnLocation.CFrame
-local API_Prem = loadstring(game:HttpGet("https://raw.githubusercontent.com/dalloc2/Roblox/main/Listing.lua"))()
+local API_Prem = false
 local PremiumActivated = true
 print('premium activated')
 
