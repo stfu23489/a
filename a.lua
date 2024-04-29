@@ -17,7 +17,8 @@ local GlobalVar = ((getgenv and getgenv()) or _G)
 local Unloaded = false
 local CriminalCFRAME = workspace["Criminals Spawn"].SpawnLocation.CFrame
 local API_Prem = loadstring(game:HttpGet("https://raw.githubusercontent.com/dalloc2/Roblox/main/Listing.lua"))()
-local PremiumActivated = API_Prem.CheckPremium()
+local PremiumActivated = true
+print('premium activated')
 
 local Temp = {}
 local API = {}
