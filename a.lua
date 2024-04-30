@@ -17,7 +17,7 @@ local GlobalVar = ((getgenv and getgenv()) or _G)
 local Unloaded = false
 local CriminalCFRAME = workspace["Criminals Spawn"].SpawnLocation.CFrame
 local PremiumActivated = true
-print('premium activated')
+print('v1.014')
 
 local Temp = {}
 local API = {}
@@ -2042,6 +2042,8 @@ do
 	API:CreateCmd("kill", "Kills a player", function(args)
 		if args[2] == "all" then
 			API:killall()
+			wait()
+			API:killall(game.Teams.Criminals)
 		elseif args[2] == "everyone" then
 			API:killall()
 		elseif args[2] == "others" then
