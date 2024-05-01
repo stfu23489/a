@@ -17,7 +17,7 @@ local GlobalVar = ((getgenv and getgenv()) or _G)
 local Unloaded = false
 local CriminalCFRAME = workspace["Criminals Spawn"].SpawnLocation.CFrame
 local PremiumActivated = true
-print('v1.016')
+print('v1.016.5')
 
 local Temp = {}
 local API = {}
@@ -3517,7 +3517,7 @@ coroutine.wrap(function()
 				repeat API:swait() Gun = Player.Backpack:FindFirstChild("Remington 870") or Player.Character:FindFirstChild("Remington 870") until Gun
 		
 				for i,v in pairs(game:GetService("Players"):GetPlayers()) do
-					if v and v ~= Player and v.Team ~= game.Teams.Guards and not table.find(API.Whitelisted, v) then
+					if v and v ~= Player and v.Team ~= game.Teams.Guards then
 					    local hasItem = false
 					    for _, item in ipairs(v.Backpack:GetChildren()) do
 					        if item.Name ~= "Breakfast" and item.Name ~= "Lunch" and item.Name ~= "Dinner" and item.Name ~= "Key card" then
