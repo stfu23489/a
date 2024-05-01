@@ -919,6 +919,7 @@ function API:killall(TeamToKill)
 			game:GetService("ReplicatedStorage").ShootEvent:FireServer(BulletTable, Gun)
 		end)
 		repeat API:swait() workspace.Remote.TeamEvent:FireServer("Bright orange") until game.Players.LocalPlayer.TeamColor.Name == "Bright orange"
+		wait(.4)
 		API:GetGun("M9")
 		repeat API:swait() Gun = Player.Backpack:FindFirstChild("M9") or Player.Character:FindFirstChild("M9") until Gun
 		local Gun = Player.Backpack:FindFirstChild("M9") or Player.Character:FindFirstChild("M9")
