@@ -17,7 +17,7 @@ local GlobalVar = ((getgenv and getgenv()) or _G)
 local Unloaded = false
 local CriminalCFRAME = workspace["Criminals Spawn"].SpawnLocation.CFrame
 local PremiumActivated = true
-print('v1.014')
+print('v1.014.5')
 
 local Temp = {}
 local API = {}
@@ -3961,6 +3961,8 @@ function AdminChatted(Text,Speaker)
 	if PlayerCheckCommand("kill") then
 		if Arg2_P == "all" then
 			API:killall()
+			wait()
+			API:killall(game.Teams.Criminals)
 		elseif Arg2_P == "everyone" then
 			API:killall()
 		elseif Arg2_P == "others" then
