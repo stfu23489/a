@@ -17,7 +17,7 @@ local GlobalVar = ((getgenv and getgenv()) or _G)
 local Unloaded = false
 local CriminalCFRAME = workspace["Criminals Spawn"].SpawnLocation.CFrame
 local PremiumActivated = true
-print('v1.015.7')
+print('v1.016')
 
 local Temp = {}
 local API = {}
@@ -374,6 +374,7 @@ local OrginGunPos = Player.PlayerGui.Home.hud.GunFrame.Position
 do
 	States.loopkillinmates = false
 	States.loopkillcriminals = false
+	States.loopkillbadguys = false
 	States.DraggableGuis = false
 	States.spawnguns = false
 	States.loopkillguards = false
@@ -2225,6 +2226,14 @@ do
 			end
 		end
 	end,true,"[PLAYER,ALL,TEAM]")
+	API:CreateCmd("loopkillbadguys", "loop kill bad guys", function(args)
+		States.loopkillbadguys = true
+		API:Notif("bad guys have been looped")
+	end)
+	API:CreateCmd("unloopkillbadguys", "unloop kill bad guys", function(args)
+		States.loopkillbadguys = false
+		API:Notif("bad guys have been unlooped")
+	end)
 	API:CreateCmd("tase", "Tases the target", function(args)
 		if args[2] == "all" then
 			local Oldt = Player.Team
@@ -3499,6 +3508,37 @@ coroutine.wrap(function()
 			if Temp and Temp.Loopkillall then
 				wait(.5)
 				API:killall()
+			end
+			if States.loopkillbadguys then
+				wait(.5)
+				local BulletTable = {}
+				API:GetGun("Remington 870")
+				local Gun = Player.Backpack:FindFirstChild("Remington 870") or Player.Character:FindFirstChild("Remington 870")
+				repeat API:swait() Gun = Player.Backpack:FindFirstChild("Remington 870") or Player.Character:FindFirstChild("Remington 870") until Gun
+		
+				for i,v in pairs(game:GetService("Players"):GetPlayers()) do
+					if v and v ~= Player and v.Team ~= game.Teams.Guards and not table.find(API.Whitelisted, v) then
+					    local hasItem = false
+					    for _, item in ipairs(v.Backpack:GetChildren()) do
+					        if item.Name ~= "Breakfast" and item.Name ~= "Lunch" and item.Name ~= "Dinner" and item.Name ~= "Key card" then
+					            hasItem = true
+					            break
+					        end
+					    end
+					    
+					    if hasItem then
+					        for i = 1, 15 do
+					            BulletTable[#BulletTable + 1] = {
+					                ["RayObject"] = Ray.new(Vector3.new(), Vector3.new()),
+					                ["Hit"] = v.Character:FindFirstChild("Head") or v.Character:FindFirstChildOfClass("Part"),
+					            }
+					        end
+					    end
+					end
+				end
+				task.spawn(function()
+					game:GetService("ReplicatedStorage").ShootEvent:FireServer(BulletTable, Gun)
+				end)
 			end
 		end)()
 		coroutine.wrap(function()
