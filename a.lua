@@ -17,7 +17,7 @@ local GlobalVar = ((getgenv and getgenv()) or _G)
 local Unloaded = false
 local CriminalCFRAME = workspace["Criminals Spawn"].SpawnLocation.CFrame
 local PremiumActivated = true
-print('v1.015.5')
+print('v1.015.6')
 
 local Temp = {}
 local API = {}
@@ -918,11 +918,10 @@ function API:killall(TeamToKill)
 		task.spawn(function()
 			game:GetService("ReplicatedStorage").ShootEvent:FireServer(BulletTable, Gun)
 		end)
-		workspace.Remote.TeamEvent:FireServer("Bright orange")
 		repeat API:swait() workspace.Remote.TeamEvent:FireServer("Bright orange") until game.Players.LocalPlayer.TeamColor.Name == "Bright orange"
-		API:GetGun("Remington 870")
-		repeat API:swait() Gun = Player.Backpack:FindFirstChild("Remington 870") or Player.Character:FindFirstChild("Remington 870") until Gun
-		local Gun = Player.Backpack:FindFirstChild("Remington 870") or Player.Character:FindFirstChild("Remington 870")
+		API:GetGun("M9")
+		repeat API:swait() Gun = Player.Backpack:FindFirstChild("M9") or Player.Character:FindFirstChild("M9") until Gun
+		local Gun = Player.Backpack:FindFirstChild("M9") or Player.Character:FindFirstChild("M9")
 		for i,v in pairs(game.Teams.Criminals:GetPlayers()) do
 			if v and v~=Player and not table.find(API.Whitelisted,v) then
 				for i =1,15 do
