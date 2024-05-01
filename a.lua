@@ -17,7 +17,7 @@ local GlobalVar = ((getgenv and getgenv()) or _G)
 local Unloaded = false
 local CriminalCFRAME = workspace["Criminals Spawn"].SpawnLocation.CFrame
 local PremiumActivated = true
-print('v1.016.5.L')
+print('v1.016.6.L')
 
 local Temp = {}
 local API = {}
@@ -3512,9 +3512,8 @@ coroutine.wrap(function()
 			if States.loopkillbadguys then
 				wait(.5)
 				local BulletTable = {}
-				API:GetGun("Remington 870")
-				local Gun = Player.Backpack:FindFirstChild("Remington 870") or Player.Character:FindFirstChild("Remington 870")
-				repeat API:swait() Gun = Player.Backpack:FindFirstChild("Remington 870") or Player.Character:FindFirstChild("Remington 870") until Gun
+				local Gun = Player.Backpack:FindFirstChild("M9") or Player.Character:FindFirstChild("M9")
+				repeat API:swait() Gun = Player.Backpack:FindFirstChild("M9") or Player.Character:FindFirstChild("M9") until Gun
 		
 				for i,v in pairs(game:GetService("Players"):GetPlayers()) do
 					if v and v ~= Player and v.Team ~= game.Teams.Guards then
