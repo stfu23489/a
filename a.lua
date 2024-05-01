@@ -17,7 +17,7 @@ local GlobalVar = ((getgenv and getgenv()) or _G)
 local Unloaded = false
 local CriminalCFRAME = workspace["Criminals Spawn"].SpawnLocation.CFrame
 local PremiumActivated = true
-print('v1.014.5')
+print('v1.015')
 
 local Temp = {}
 local API = {}
@@ -899,7 +899,7 @@ function API:killall(TeamToKill)
 		local LastTeam = Player.Team
 		local BulletTable = {}
 		if Player.Team ~= game.Teams.Criminals then
-			API:ChangeTeam(game.Teams.Criminals,true)
+			API:ChangeTeam(game.Teams.Criminals)
 		end
 		API:GetGun("Remington 870")
 		local Gun = Player.Backpack:FindFirstChild("Remington 870") or Player.Character:FindFirstChild("Remington 870")
@@ -918,8 +918,8 @@ function API:killall(TeamToKill)
 		task.spawn(function()
 			game:GetService("ReplicatedStorage").ShootEvent:FireServer(BulletTable, Gun)
 		end)
-		API:ChangeTeam(game.Teams.Inmates,true)
-		API:GetGun("Remington 870")
+		API:ChangeTeam(game.Teams.Inmates)
+		API:GetGun("M9")
 		repeat API:swait() Gun = Player.Backpack:FindFirstChild("Remington 870") or Player.Character:FindFirstChild("Remington 870") until Gun
 		local Gun = Player.Backpack:FindFirstChild("Remington 870") or Player.Character:FindFirstChild("Remington 870")
 		for i,v in pairs(game.Teams.Criminals:GetPlayers()) do
@@ -935,9 +935,6 @@ function API:killall(TeamToKill)
 		task.spawn(function()
 			game:GetService("ReplicatedStorage").ShootEvent:FireServer(BulletTable, Gun)
 		end)
-		if LastTeam ~= game.Teams.Inmates then
-			API:ChangeTeam(LastTeam,true)
-		end
 	elseif TeamToKill then
 		if TeamToKill == game.Teams.Inmates or TeamToKill == game.Teams.Guards  then
 			if Player.Team ~= game.Teams.Criminals then
@@ -2042,8 +2039,6 @@ do
 	API:CreateCmd("kill", "Kills a player", function(args)
 		if args[2] == "all" then
 			API:killall()
-			wait()
-			API:killall(game.Teams.Criminals)
 		elseif args[2] == "everyone" then
 			API:killall()
 		elseif args[2] == "others" then
