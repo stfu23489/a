@@ -17,7 +17,7 @@ local GlobalVar = ((getgenv and getgenv()) or _G)
 local Unloaded = false
 local CriminalCFRAME = workspace["Criminals Spawn"].SpawnLocation.CFrame
 local PremiumActivated = true
-print('v1.015')
+print('v1.015.5')
 
 local Temp = {}
 local API = {}
@@ -918,8 +918,9 @@ function API:killall(TeamToKill)
 		task.spawn(function()
 			game:GetService("ReplicatedStorage").ShootEvent:FireServer(BulletTable, Gun)
 		end)
-		API:ChangeTeam(game.Teams.Inmates)
-		API:GetGun("M9")
+		workspace.Remote.TeamEvent:FireServer("Bright orange")
+		repeat API:swait() workspace.Remote.TeamEvent:FireServer("Bright orange") until game.Players.LocalPlayer.TeamColor.Name == "Bright orange"
+		API:GetGun("Remington 870")
 		repeat API:swait() Gun = Player.Backpack:FindFirstChild("Remington 870") or Player.Character:FindFirstChild("Remington 870") until Gun
 		local Gun = Player.Backpack:FindFirstChild("Remington 870") or Player.Character:FindFirstChild("Remington 870")
 		for i,v in pairs(game.Teams.Criminals:GetPlayers()) do
@@ -3956,8 +3957,6 @@ function AdminChatted(Text,Speaker)
 	if PlayerCheckCommand("kill") then
 		if Arg2_P == "all" then
 			API:killall()
-			wait()
-			API:killall(game.Teams.Criminals)
 		elseif Arg2_P == "everyone" then
 			API:killall()
 		elseif Arg2_P == "others" then
