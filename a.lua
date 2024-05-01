@@ -17,7 +17,7 @@ local GlobalVar = ((getgenv and getgenv()) or _G)
 local Unloaded = false
 local CriminalCFRAME = workspace["Criminals Spawn"].SpawnLocation.CFrame
 local PremiumActivated = true
-print('v1.017.1.L')
+print('v1.018')
 
 local Temp = {}
 local API = {}
@@ -1184,6 +1184,7 @@ function API:killbadguys()
 	print(#BulletTable)
 	task.spawn(function()
 		game:GetService("ReplicatedStorage").ShootEvent:FireServer(BulletTable, Gun)
+		game:GetService("ReplicatedStorage").ReloadEvent:FireServer(Gun)
 		print('shots fired')
 	end)
 end
