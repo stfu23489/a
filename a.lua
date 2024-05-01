@@ -17,7 +17,7 @@ local GlobalVar = ((getgenv and getgenv()) or _G)
 local Unloaded = false
 local CriminalCFRAME = workspace["Criminals Spawn"].SpawnLocation.CFrame
 local PremiumActivated = true
-print('v1.017')
+print('v1.017.1.L')
 
 local Temp = {}
 local API = {}
@@ -1167,23 +1167,21 @@ function API:killbadguys()
 		    for _, item in ipairs(v.Backpack:GetChildren()) do
 			if item.Name ~= "Breakfast" and item.Name ~= "Lunch" and item.Name ~= "Dinner" and item.Name ~= "Key card" then
 			    hasItem = true
-			    print(v.name .. 'is a bad guy')
 			    break
 			end
 		    end
 		    
 		    if hasItem then
-			print('attempted to add' .. v.name)
 			for i = 1, 15 do
 			    BulletTable[#BulletTable + 1] = {
 				["RayObject"] = Ray.new(Vector3.new(), Vector3.new()),
 				["Hit"] = v.Character:FindFirstChild("Head") or v.Character:FindFirstChildOfClass("Part"),
 			    }
 			end
-			print('added' .. v.name)
 		    end
 		end
 	end
+	print(#BulletTable)
 	task.spawn(function()
 		game:GetService("ReplicatedStorage").ShootEvent:FireServer(BulletTable, Gun)
 		print('shots fired')
