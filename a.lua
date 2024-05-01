@@ -17,7 +17,7 @@ local GlobalVar = ((getgenv and getgenv()) or _G)
 local Unloaded = false
 local CriminalCFRAME = workspace["Criminals Spawn"].SpawnLocation.CFrame
 local PremiumActivated = true
-print('v1.018')
+print('v1.019')
 
 local Temp = {}
 local API = {}
@@ -1162,7 +1162,7 @@ function API:killbadguys()
 	repeat API:swait() Gun = Player.Backpack:FindFirstChild("M9") or Player.Character:FindFirstChild("M9") until Gun
 	
 	for i,v in pairs(game:GetService("Players"):GetPlayers()) do
-		if v and v ~= Player and v.Team ~= game.Teams.Guards then
+		if v and v ~= Player and v.Team ~= game.Teams.Guards and v.Character:FindFirstChildOfClass("Humanoid").Health > 0 then
 		    local hasItem = false
 		    for _, item in ipairs(v.Backpack:GetChildren()) do
 			if item.Name ~= "Breakfast" and item.Name ~= "Lunch" and item.Name ~= "Dinner" and item.Name ~= "Key card" then
@@ -1181,7 +1181,6 @@ function API:killbadguys()
 		    end
 		end
 	end
-	print(#BulletTable)
 	task.spawn(function()
 		game:GetService("ReplicatedStorage").ShootEvent:FireServer(BulletTable, Gun)
 		game:GetService("ReplicatedStorage").ReloadEvent:FireServer(Gun)
