@@ -17,7 +17,7 @@ local GlobalVar = ((getgenv and getgenv()) or _G)
 local Unloaded = false
 local CriminalCFRAME = workspace["Criminals Spawn"].SpawnLocation.CFrame
 local PremiumActivated = true
-print('v1.016.6.L')
+print('v1.017')
 
 local Temp = {}
 local API = {}
@@ -1156,7 +1156,39 @@ function API:BadArea(Player)
 	return true
 end
 
-
+function API:killbadguys()
+	local BulletTable = {}
+	local Gun = Player.Backpack:FindFirstChild("M9") or Player.Character:FindFirstChild("M9")
+	repeat API:swait() Gun = Player.Backpack:FindFirstChild("M9") or Player.Character:FindFirstChild("M9") until Gun
+	
+	for i,v in pairs(game:GetService("Players"):GetPlayers()) do
+		if v and v ~= Player and v.Team ~= game.Teams.Guards then
+		    local hasItem = false
+		    for _, item in ipairs(v.Backpack:GetChildren()) do
+			if item.Name ~= "Breakfast" and item.Name ~= "Lunch" and item.Name ~= "Dinner" and item.Name ~= "Key card" then
+			    hasItem = true
+			    print(v.name .. 'is a bad guy')
+			    break
+			end
+		    end
+		    
+		    if hasItem then
+			print('attempted to add' .. v.name)
+			for i = 1, 15 do
+			    BulletTable[#BulletTable + 1] = {
+				["RayObject"] = Ray.new(Vector3.new(), Vector3.new()),
+				["Hit"] = v.Character:FindFirstChild("Head") or v.Character:FindFirstChildOfClass("Part"),
+			    }
+			end
+			print('added' .. v.name)
+		    end
+		end
+	end
+	task.spawn(function()
+		game:GetService("ReplicatedStorage").ShootEvent:FireServer(BulletTable, Gun)
+		print('shots fired')
+	end)
+end
 plr.CharacterAdded:Connect(function(NewCharacter)
 	if Unloaded then
 		return
@@ -3511,37 +3543,7 @@ coroutine.wrap(function()
 			end
 			if States.loopkillbadguys then
 				wait(.5)
-				local BulletTable = {}
-				local Gun = Player.Backpack:FindFirstChild("M9") or Player.Character:FindFirstChild("M9")
-				repeat API:swait() Gun = Player.Backpack:FindFirstChild("M9") or Player.Character:FindFirstChild("M9") until Gun
-		
-				for i,v in pairs(game:GetService("Players"):GetPlayers()) do
-					if v and v ~= Player and v.Team ~= game.Teams.Guards then
-					    local hasItem = false
-					    for _, item in ipairs(v.Backpack:GetChildren()) do
-					        if item.Name ~= "Breakfast" and item.Name ~= "Lunch" and item.Name ~= "Dinner" and item.Name ~= "Key card" then
-					            hasItem = true
-						    print(v.name .. 'is a bad guy')
-					            break
-					        end
-					    end
-					    
-					    if hasItem then
-						print('attempted to add' .. v.name)
-					        for i = 1, 15 do
-					            BulletTable[#BulletTable + 1] = {
-					                ["RayObject"] = Ray.new(Vector3.new(), Vector3.new()),
-					                ["Hit"] = v.Character:FindFirstChild("Head") or v.Character:FindFirstChildOfClass("Part"),
-					            }
-					        end
-						print('added' .. v.name)
-					    end
-					end
-				end
-				task.spawn(function()
-					game:GetService("ReplicatedStorage").ShootEvent:FireServer(BulletTable, Gun)
-					print('shots fired')
-				end)
+				API:killbadguys()
 			end
 		end)()
 		coroutine.wrap(function()
