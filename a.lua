@@ -17,7 +17,7 @@ local GlobalVar = ((getgenv and getgenv()) or _G)
 local Unloaded = false
 local CriminalCFRAME = workspace["Criminals Spawn"].SpawnLocation.CFrame
 local PremiumActivated = true
-print('v1.023')
+print('v1.024')
 
 local Temp = {}
 local API = {}
@@ -4165,7 +4165,7 @@ game:GetService("RunService").RenderStepped:Connect(function()--//Global Runserv
 end)
 
 local function PlayerAddedANTIFLING(Player)
-	if Unloaded or not States.AntiFling then
+	if Unloaded or not States.AntiFling or States.noclip then
 		return
 	end
 	local Detected = false
