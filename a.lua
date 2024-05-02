@@ -17,7 +17,7 @@ local GlobalVar = ((getgenv and getgenv()) or _G)
 local Unloaded = false
 local CriminalCFRAME = workspace["Criminals Spawn"].SpawnLocation.CFrame
 local PremiumActivated = true
-print('v1.020')
+print('v1.021')
 
 local Temp = {}
 local API = {}
@@ -1216,6 +1216,7 @@ plr.CharacterAdded:Connect(function(NewCharacter)
 	end)
 	if Temp.ArrestOldP and States.AntiArrest then
 		coroutine.wrap(function()
+			wait(7)
 			API:MoveTo(Temp.ArrestOldP)
 			Temp.ArrestOldP = nil
 		end)()
@@ -1227,7 +1228,6 @@ plr.CharacterAdded:Connect(function(NewCharacter)
 					if a and a:IsA("BillboardGui") and States.AntiArrest then
 						API:Refresh()
 						coroutine.wrap(function()
-							wait(1)
 							Temp.ArrestOldP = API:GetPosition()
 						end)()
 					end
