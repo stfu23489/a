@@ -17,7 +17,7 @@ local GlobalVar = ((getgenv and getgenv()) or _G)
 local Unloaded = false
 local CriminalCFRAME = workspace["Criminals Spawn"].SpawnLocation.CFrame
 local PremiumActivated = true
-print('v1.022')
+print('v1.023')
 
 local Temp = {}
 local API = {}
@@ -381,13 +381,13 @@ do
 	States.Antishield = false
 	States.DoorsDestroy = false
 	States.antipunch = false
-	States.AutoRespawn = true
+	States.AutoRespawn = false
 	States.AutoItems = false
 	States.ClickKill = false
 	States.ClickArrest = false
-	States.AntiTase = true
-	States.AntiArrest = true
-	States.OnePunch = true
+	States.AntiTase = false
+	States.AntiArrest = false
+	States.OnePunch = false
 	States.killaura = false
 	States.anticrash = true
 	States.AntiTouch = false
@@ -395,7 +395,7 @@ do
 	States.AntiFling = true
 	States.AutoInfAmmo = false
 	States.joinlogs = false
-	States.noclip = true
+	States.noclip = false
 	States.Godmode = false
 	States.loopopendoors = false
 	States.SilentAim = false
@@ -3115,6 +3115,20 @@ do
 			States.AutoInfAmmo = not States.AutoInfAmmo
 			API:Notif("AutoInfAmmo has been changed to "..tostring(States.AutoInfAmmo))
 		end
+	end)
+	API:CreateCmd("kit", "kit", function(args)
+		States.AutoRespawn = true
+		States.AntiTase = true
+		States.AntiArrest = true
+		States.OnePunch = true
+		States.noclip = true
+	end)
+	API:CreateCmd("nokit", "nokit", function(args)
+		States.AutoRespawn = false
+		States.AntiTase = false
+		States.AntiArrest = false
+		States.OnePunch = false
+		States.noclip = false
 	end)
 	API:CreateCmd("unload", "Destroys the script unloading it", function(args)
 		API:Destroy(game:FindFirstChild("Tiger_revamp_loaded"))
