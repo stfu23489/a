@@ -17,7 +17,7 @@ local GlobalVar = ((getgenv and getgenv()) or _G)
 local Unloaded = false
 local CriminalCFRAME = workspace["Criminals Spawn"].SpawnLocation.CFrame
 local PremiumActivated = true
-print('v1.021')
+print('v1.022')
 
 local Temp = {}
 local API = {}
@@ -385,17 +385,17 @@ do
 	States.AutoItems = false
 	States.ClickKill = false
 	States.ClickArrest = false
-	States.AntiTase = false
-	States.AntiArrest = false
-	States.OnePunch = false
+	States.AntiTase = true
+	States.AntiArrest = true
+	States.OnePunch = true
 	States.killaura = false
-	States.anticrash = false
+	States.anticrash = true
 	States.AntiTouch = false
 	States.ShootBack = false
-	States.AntiFling = false
+	States.AntiFling = true
 	States.AutoInfAmmo = false
 	States.joinlogs = false
-	States.noclip = false
+	States.noclip = true
 	States.Godmode = false
 	States.loopopendoors = false
 	States.SilentAim = false
