@@ -392,7 +392,7 @@ do
 	States.anticrash = true
 	States.AntiTouch = false
 	States.ShootBack = false
-	States.AntiFling = true
+	States.AntiFling = false
 	States.AutoInfAmmo = false
 	States.joinlogs = false
 	States.noclip = false
