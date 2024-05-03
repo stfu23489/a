@@ -17,7 +17,7 @@ local GlobalVar = ((getgenv and getgenv()) or _G)
 local Unloaded = false
 local CriminalCFRAME = workspace["Criminals Spawn"].SpawnLocation.CFrame
 local PremiumActivated = true
-print('v1.025')
+print('v1.026')
 
 local Temp = {}
 local API = {}
@@ -3122,6 +3122,19 @@ do
 		States.AntiArrest = true
 		States.OnePunch = true
 		States.noclip = true
+		pcall(function()
+			Temp.Noclipping:Disconnect()
+			Temp.Noclipping = nil
+		end)
+		wait()
+		Temp.Noclipping = game:GetService("RunService").Stepped:Connect(function()
+			for i,v in pairs(plr.Character:GetDescendants()) do
+				if v and v:IsA("Part") or v:IsA("MeshPart") and v.CanCollide and Unloaded == false then
+					v.CanCollide = false
+				end
+			end
+		end)
+		API:Notif("enabled kit")
 	end)
 	API:CreateCmd("nokit", "nokit", function(args)
 		States.AutoRespawn = false
@@ -3129,6 +3142,12 @@ do
 		States.AntiArrest = false
 		States.OnePunch = false
 		States.noclip = false
+		pcall(function()
+			Temp.Noclipping:Disconnect()
+			Temp.Noclipping = nil
+		end)
+		API:Refresh(true)
+		API:Notif("removed kit")
 	end)
 	API:CreateCmd("unload", "Destroys the script unloading it", function(args)
 		API:Destroy(game:FindFirstChild("Tiger_revamp_loaded"))
