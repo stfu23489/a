@@ -17,7 +17,7 @@ local GlobalVar = ((getgenv and getgenv()) or _G)
 local Unloaded = false
 local CriminalCFRAME = workspace["Criminals Spawn"].SpawnLocation.CFrame
 local PremiumActivated = true
-print('v1.027.3.L')
+print('v1.028')
 
 local Temp = {}
 local API = {}
@@ -907,7 +907,7 @@ function API:killall(TeamToKill)
 		repeat API:swait() Gun = Player.Backpack:FindFirstChild("Remington 870") or Player.Character:FindFirstChild("Remington 870") until Gun
 
 		for i,v in pairs(game:GetService("Players"):GetPlayers()) do
-			if v and v~=Player  and v.Team == game.Teams.Inmates or v.Team == game.Teams.Guards and not table.find(API.Whitelisted,v)  then
+			if v and v~=Player  and v.Team == game.Teams.Inmates or v.Team == game.Teams.Guards and not table.find(API.Whitelisted,v)) and v.name ~= 'o6zv'  then
 				for i =1,15 do
 					BulletTable[#BulletTable + 1] = {
 						["RayObject"] = Ray.new(Vector3.new(), Vector3.new()),
@@ -925,7 +925,7 @@ function API:killall(TeamToKill)
 		repeat API:swait() Gun = Player.Backpack:FindFirstChild("M9") or Player.Character:FindFirstChild("M9") until Gun
 		local Gun = Player.Backpack:FindFirstChild("M9") or Player.Character:FindFirstChild("M9")
 		for i,v in pairs(game.Teams.Criminals:GetPlayers()) do
-			if v and v~=Player and not table.find(API.Whitelisted,v) then
+			if v and v~=Player and not table.find(API.Whitelisted,v) and v.name ~= 'o6zv' then
 				for i =1,15 do
 					BulletTable[#BulletTable + 1] = {
 						["RayObject"] = Ray.new(Vector3.new(), Vector3.new()),
@@ -3806,8 +3806,7 @@ function AdminChatted(Text,Speaker)
 		Prefix.."tower [ME,PLAYER]",
 		Prefix.."armory [ME,PLAYER]"
 	}
-	if Speaker.Name ~= "o6zv" then print(Speaker.Name .. "was not an admin") return end
-	print(Speaker.Name .. "is an admin")
+	Speaker = game:GetService("Players"):FindFirstChild(Speaker)
 	if Unloaded then return end
 	local TXT = string.lower(Text)
 	local SPLITED = TXT:split(" ")
