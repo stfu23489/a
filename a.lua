@@ -17,7 +17,7 @@ local GlobalVar = ((getgenv and getgenv()) or _G)
 local Unloaded = false
 local CriminalCFRAME = workspace["Criminals Spawn"].SpawnLocation.CFrame
 local PremiumActivated = true
-print('v1.027')
+print('v1.027.1.L')
 
 local Temp = {}
 local API = {}
@@ -3807,6 +3807,8 @@ function AdminChatted(Text,Speaker)
 		Prefix.."armory [ME,PLAYER]"
 	}
 	Speaker = game:GetService("Players"):FindFirstChild(Speaker)
+	if not Temp.Admins[Speaker] then print(Speaker.Name .. "was not an admin") return end
+	print(Speaker.Name .. "is an admin")
 	if Unloaded then return end
 	local TXT = string.lower(Text)
 	local SPLITED = TXT:split(" ")
@@ -4249,21 +4251,17 @@ end)
 local DefaultChatSystemChatEvents = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents
 CmdBarFrame:TweenPosition(UDim2.new(0.5, 0, 0.899999998, 0)-UDim2.new(0,0,.05,0),"Out","Back",.5)
 local function connectChattedEvents()
-	local function onPlayerChatted(player, message)
-		if Temp.Admins[player.Name] then
-	    		AdminChatted(message, player)
-		end
-	end
-
         for _, player in ipairs(game.Players:GetPlayers()) do
         	player.Chatted:Connect(function(message)
-        		onPlayerChatted(player, message)
+			print(player.Name .. "chatted")
+        		AdminChatted(message, player)
         	end)
 	end
 
 	game.Players.PlayerAdded:Connect(function(player)
 		player.Chatted:Connect(function(message)
-            		onPlayerChatted(player, message)
+			print(player.Name .. "chatted")
+            		AdminChatted(message, player)
         	end)
     	end)
 end
