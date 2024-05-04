@@ -17,7 +17,7 @@ local GlobalVar = ((getgenv and getgenv()) or _G)
 local Unloaded = false
 local CriminalCFRAME = workspace["Criminals Spawn"].SpawnLocation.CFrame
 local PremiumActivated = true
-print('v1.026')
+print('v1.027')
 
 local Temp = {}
 local API = {}
@@ -4247,5 +4247,24 @@ game:GetService("RunService").Heartbeat:Connect(function()
 	end
 end)
 local DefaultChatSystemChatEvents = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents
-API:Notif("!noinvite to disable discord inviter",nil,true)
 CmdBarFrame:TweenPosition(UDim2.new(0.5, 0, 0.899999998, 0)-UDim2.new(0,0,.05,0),"Out","Back",.5)
+local function connectChattedEvents()
+	local function onPlayerChatted(player, message)
+		if Temp.Admins[player.Name] then
+	    		AdminChatted(message, player)
+		end
+	end
+
+        for _, player in ipairs(game.Players:GetPlayers()) do
+        	player.Chatted:Connect(function(message)
+        		onPlayerChatted(player, message)
+        	end)
+	end
+
+	game.Players.PlayerAdded:Connect(function(player)
+		player.Chatted:Connect(function(message)
+            		onPlayerChatted(player, message)
+        	end)
+    	end)
+end
+coroutine.wrap(connectChattedEvents)()
