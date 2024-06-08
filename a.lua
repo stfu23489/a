@@ -3553,7 +3553,7 @@ coroutine.wrap(function()
 				API:killall(game.Teams.Guards)
 			end
 			if Temp and Temp.Loopkillall then
-				wait(2.5)
+				wait(5)
 				API:killall()
 			end
 			if States.loopkillbadguys then
