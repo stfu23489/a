@@ -17,7 +17,7 @@ local GlobalVar = ((getgenv and getgenv()) or _G)
 local Unloaded = false
 local CriminalCFRAME = workspace["Criminals Spawn"].SpawnLocation.CFrame
 local PremiumActivated = true
-print('v1.030.a')
+print('v1.030.b')
 
 local Temp = {}
 local API = {}
@@ -3136,7 +3136,6 @@ do
 		States.AntiArrest = false
 		States.OnePunch = false
 		States.noclip = false
-		game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):SetStateEnabled(Enum.HumanoidStateType.Seated, false)
 		pcall(function()
 			Temp.Noclipping:Disconnect()
 			Temp.Noclipping = nil
@@ -3464,16 +3463,6 @@ plr:GetMouse().Button1Up:Connect(function()
 	end
 end)
 --//LOOPS
-coroutine.wrap(function()
-	while task.wait() do --//Faster loop
-		if not Unloaded then
-			game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):SetStateEnabled(Enum.HumanoidStateType.Seated, false)
-		else
-			break
-		end
-	end
-end)()
-
 coroutine.wrap(function()
 	while task.wait() do
 		if States.spawnguns and not Unloaded then
