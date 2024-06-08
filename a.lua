@@ -17,7 +17,7 @@ local GlobalVar = ((getgenv and getgenv()) or _G)
 local Unloaded = false
 local CriminalCFRAME = workspace["Criminals Spawn"].SpawnLocation.CFrame
 local PremiumActivated = true
-print('v1.029')
+print('v1.029.b')
 
 local Temp = {}
 local API = {}
@@ -920,7 +920,7 @@ function API:killall(TeamToKill)
 			game:GetService("ReplicatedStorage").ShootEvent:FireServer(BulletTable, Gun)
 		end)
 		repeat API:swait() workspace.Remote.TeamEvent:FireServer("Bright orange") until game.Players.LocalPlayer.TeamColor.Name == "Bright orange"
-		wait(1.7)
+		wait(0.7)
 		API:GetGun("M9")
 		repeat API:swait() Gun = Player.Backpack:FindFirstChild("M9") or Player.Character:FindFirstChild("M9") until Gun
 		local Gun = Player.Backpack:FindFirstChild("M9") or Player.Character:FindFirstChild("M9")
