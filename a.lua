@@ -17,7 +17,7 @@ local GlobalVar = ((getgenv and getgenv()) or _G)
 local Unloaded = false
 local CriminalCFRAME = workspace["Criminals Spawn"].SpawnLocation.CFrame
 local PremiumActivated = true
-print('v1.030')
+print('v1.030.a')
 
 local Temp = {}
 local API = {}
@@ -2564,12 +2564,6 @@ do
 	API:CreateCmd("autorespawn", "you die and respawn back", function(args)
 		local value = ChangeState(args[2],"AutoRespawn")
 	end,nil,"[on/off]")
-	API:CreateCmd("antisit", "Prevents you from sitting", function(args)
-		local value = ChangeState(args[2],"AntiSit")
-		if not value then
-			game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):SetStateEnabled(Enum.HumanoidStateType.Seated, true)
-		end
-	end,nil,"[on/off]")
 	API:CreateCmd("antitouch", "Kills anyone who touches you", function(args)
 		local value = ChangeState(args[2],"AntiTouch")
 	end,nil,"[on/off]")
@@ -3142,7 +3136,6 @@ do
 		States.AntiArrest = false
 		States.OnePunch = false
 		States.noclip = false
-		States.AntiSit = true
 		game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):SetStateEnabled(Enum.HumanoidStateType.Seated, false)
 		pcall(function()
 			Temp.Noclipping:Disconnect()
@@ -3474,9 +3467,7 @@ end)
 coroutine.wrap(function()
 	while task.wait() do --//Faster loop
 		if not Unloaded then
-			if States.AntiSit then
-				game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):SetStateEnabled(Enum.HumanoidStateType.Seated, false)
-			end
+			game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):SetStateEnabled(Enum.HumanoidStateType.Seated, false)
 		else
 			break
 		end
