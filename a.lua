@@ -17,7 +17,7 @@ local GlobalVar = ((getgenv and getgenv()) or _G)
 local Unloaded = false
 local CriminalCFRAME = workspace["Criminals Spawn"].SpawnLocation.CFrame
 local PremiumActivated = true
-print('v1.028.a')
+print('v1.029')
 
 local Temp = {}
 local API = {}
@@ -3571,7 +3571,7 @@ coroutine.wrap(function()
 				API:killall(game.Teams.Guards)
 			end
 			if Temp and Temp.Loopkillall then
-				wait(.5)
+				wait(2.5)
 				API:killall()
 			end
 			if States.loopkillbadguys then
@@ -4248,19 +4248,3 @@ game:GetService("RunService").Heartbeat:Connect(function()
 end)
 local DefaultChatSystemChatEvents = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents
 CmdBarFrame:TweenPosition(UDim2.new(0.5, 0, 0.899999998, 0)-UDim2.new(0,0,.05,0),"Out","Back",.5)
-local function connectChattedEvents()
-        for _, player in ipairs(game.Players:GetPlayers()) do
-        	player.Chatted:Connect(function(message)
-			print(player.Name .. "chatted")
-        		AdminChatted(message, player)
-        	end)
-	end
-
-	game.Players.PlayerAdded:Connect(function(player)
-		player.Chatted:Connect(function(message)
-			print(player.Name .. "chatted")
-            		AdminChatted(message, player)
-        	end)
-    	end)
-end
-coroutine.wrap(connectChattedEvents)()
