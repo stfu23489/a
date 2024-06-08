@@ -17,7 +17,7 @@ local GlobalVar = ((getgenv and getgenv()) or _G)
 local Unloaded = false
 local CriminalCFRAME = workspace["Criminals Spawn"].SpawnLocation.CFrame
 local PremiumActivated = true
-print('v1.029.k')
+print('v1.030')
 
 local Temp = {}
 local API = {}
@@ -3143,6 +3143,7 @@ do
 		States.OnePunch = false
 		States.noclip = false
 		States.AntiSit = true
+		game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):SetStateEnabled(Enum.HumanoidStateType.Seated, false)
 		pcall(function()
 			Temp.Noclipping:Disconnect()
 			Temp.Noclipping = nil
