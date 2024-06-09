@@ -17,7 +17,7 @@ local GlobalVar = ((getgenv and getgenv()) or _G)
 local Unloaded = false
 local CriminalCFRAME = workspace["Criminals Spawn"].SpawnLocation.CFrame
 local PremiumActivated = true
-print('v1.031')
+print('v1.031.1')
 
 local Temp = {}
 local API = {}
@@ -3190,7 +3190,7 @@ coroutine.wrap(function()
 								local args = {
 									[1] = v
 								}
-								for i =1,3 do
+								for i =1,15 do
 									task.spawn(function()
 										game:GetService("ReplicatedStorage").meleeEvent:FireServer(unpack(args))
 									end)
