@@ -17,7 +17,7 @@ local GlobalVar = ((getgenv and getgenv()) or _G)
 local Unloaded = false
 local CriminalCFRAME = workspace["Criminals Spawn"].SpawnLocation.CFrame
 local PremiumActivated = true
-print('v1.031.2')
+print('v1.031.3')
 
 local Temp = {}
 local API = {}
@@ -2712,12 +2712,6 @@ do
 			repeat task.wait() until car:FindFirstChild("RWD") and car:FindFirstChild("Body") and car:FindFirstChild("Body"):FindFirstChild("VehicleSeat")
 			car.PrimaryPart = car.RWD
 			game:GetService("Players").LocalPlayer.Character:SetPrimaryPartCFrame(OldPos)
-			wait(1)
-			car.Body.VehicleSeat:Sit(game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid"))
-			game:GetService("RunService").RenderStepped:Wait()
-			car:SetPrimaryPartCFrame(OldPos)
-			game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame =CFrame.new(car.Body.VehicleSeat.Position)
-			car.Body.VehicleSeat:Sit(game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid"))
 		end)
 	end)
 	API:CreateCmd("opengate", "Opens the main prison gate", function(args)
