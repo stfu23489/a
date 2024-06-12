@@ -12,7 +12,7 @@ game:GetService("Players").LocalPlayer.Character:WaitForChild("HumanoidRootPart"
 if game:FindFirstChild("Tiger_revamp_loaded") then  ((getgenv and getgenv()) or _G).NotifTiger("Tiger admin is already executed!",false) return warn("Already loaded") end
 local Player, plr,Folder = game:GetService("Players").LocalPlayer, game:GetService("Players").LocalPlayer,Instance.new("Folder",game)
 local OldHook, hookmetamethod, getnamecallmethod = nil, hookmetamethod, getnamecallmethod
-local HasGamepass,UserInputService = game:GetService("MarketplaceService"):UserOwnsGamePassAsync(Player.UserId, 96651),game:GetService("UserInputService")
+local UserInputService = game:GetService("UserInputService")
 local GlobalVar = ((getgenv and getgenv()) or _G)
 local Unloaded = false
 local CriminalCFRAME = workspace["Criminals Spawn"].SpawnLocation.CFrame
@@ -981,7 +981,7 @@ function API:GuardsFull(a)
 end
 function API:AllGuns()
 	local saved = game:GetService("Players").LocalPlayer.Character:GetPrimaryPartCFrame()
-	if game:GetService("MarketplaceService"):UserOwnsGamePassAsync(plr.UserId, 96651) then
+	if game:GetService("MarketplaceService"):UserOwnsAsync(plr.UserId, 96651) then
 		API:GetGun("M4A1", true)
 	end
 	API:GetGun("AK-47", true)
