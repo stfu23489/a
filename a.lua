@@ -981,9 +981,6 @@ function API:GuardsFull(a)
 end
 function API:AllGuns()
 	local saved = game:GetService("Players").LocalPlayer.Character:GetPrimaryPartCFrame()
-	if game:GetService("MarketplaceService"):UserOwnsAsync(plr.UserId, 96651) then
-		API:GetGun("M4A1", true)
-	end
 	API:GetGun("AK-47", true)
 	task.spawn(function()
 		API:GetGun("Remington 870", true)
